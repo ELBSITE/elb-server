@@ -1,0 +1,149 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+?>
+<?php /** @var $block \Magento\Checkout\Block\Onepage\Success */ ?>
+<div class="checkout-success  0013">
+    <?php if ($block->getOrderId()) :?>
+        <?php if ($block->getCanViewOrder()) :?>
+            <p><?= $block->escapeHtml(__('Your order number is: %1.', sprintf('<a href="%s" class="order-number"><strong>%s</strong></a>', $block->escapeUrl($block->getViewOrderUrl()), $block->getOrderId())), ['a', 'strong']) ?></p>
+        <?php  else :?>
+            <p><?= $block->escapeHtml(__('Your order # is: <span>%1</span>.', $block->getOrderId()), ['span']) ?></p>
+        <?php endif;?>
+            <p><?= $block->escapeHtml(__('We\'ll email you an order confirmation with details and tracking info.')) ?></p>
+    <?php endif;?>
+
+    <?= $block->getAdditionalInfoHtml() ?>
+
+    <div class="actions-toolbar">
+        <div class="primary">
+            <a class="action primary continue" href="<?= $block->escapeUrl($block->getContinueUrl()) ?>"><span><?= $block->escapeHtml(__('Continue Shopping')) ?></span></a>
+        </div>
+    </div>
+</div>
+
+ <?php if ($block->getOrderId()) { 
+
+$storeId = 1;
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$incrId = $block->getOrderId();
+
+$collection = $objectManager->create('Magento\Sales\Model\Order'); 
+$orderInfo = $collection->loadByIncrementId($incrId);
+
+$orderId = $orderInfo ->getId();
+$additionalInformation = $orderInfo->getPayment();
+$storeid = 'Store EnergyLightBulbs';
+$currency_code = $orderInfo->getData('base_currency_code');
+$tax_amount = $orderInfo->getData('tax_amount');
+$grand_total = $orderInfo->getData('grand_total');
+$shipping_amount = $orderInfo->getData('shipping_amount');
+$shipping_tax_amount = $orderInfo->getData('shipping_tax_amount');
+$last_trans_id = $additionalInformation->getData('last_trans_id');
+$array_product = '';
+
+$tax_amount = number_format((float)$tax_amount, 2, '.', ''); 
+$grand_total = number_format((float)$grand_total, 2, '.', ''); 
+$shipping_amount = number_format((float)$shipping_amount, 2, '.', ''); 
+$shipping_tax_amount = number_format((float)$shipping_tax_amount, 2, '.', ''); 
+
+	foreach ($orderInfo->getAllVisibleItems() as $key => $_item) {
+            $product_id = $_item->getId();
+            $itemid  = $_item->getSku();
+            $itemname = $_item->getName();
+            $qty = $_item->getQtyOrdered();
+            $discount_amount = $_item->getData('discount_amount');
+            $price = $_item->getData('price');
+            
+            $qty = number_format((float)$qty, 2, '.', ''); 
+            $price = number_format((float)$price, 2, '.', ''); 
+
+
+            $array_product .= '{
+                item_id:"'.$itemid.'",
+                item_name:"'.$itemname.'",
+                affiliation:"'.$storeid.'",
+                coupon:"",
+                currency:"'.$currency_code.'",
+                discount:"'.'",
+                index:"'.$key.'",
+                item_brand:"",
+                ';
+            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+            //$product_id = 79;
+            $product = $objectManager->create('Magento\Catalog\Model\Product')->load($product_id);
+            $categories = $product->getCategoryIds();
+            if($categories){
+            foreach($categories as $key => $category){
+                    $key  = $key +1;
+                    $cat = $objectManager->create('Magento\Catalog\Model\Category')->load($category);
+                    $cat_name =  $cat->getName();
+                    if($key ==1){
+                        $array_product .= 'item_category:"'.$cat_name.'",
+                    ';
+                    }else{
+                $array_product .= 'item_category'.$key.':"'.$cat_name.'",
+                 ';
+                    }
+                }
+            }else{
+                $array_product .= 'item_category:"",
+                ';
+            }
+                $array_product .= 'item_list_id:"related_products",
+                item_list_name:"Related Products",
+                item_variant:"",
+                location_id:"",
+                price:"'.$price.'",
+                quantity:"'.$qty.'"
+             } ';
+        if($key !=0){
+            $array_product .= '
+            ,
+            ';
+        }
+	    
+	}
+$array_order = 'dataLayer.push({ ecommerce: null });
+dataLayer.push({
+    event: "purchase",
+    ecommerce: {
+        transaction_id: "'.$last_trans_id.'",
+        affiliation: "'.$storeid .'",
+        value: '.$grand_total.',
+        tax: '.$tax_amount.',
+        shipping: '.$shipping_amount.',
+        currency: "'.$currency_code.'",
+        coupon: "",
+         items: ['.$array_product.']
+}})';
+
+$gtag = 'gtag({
+        event: "purchase",{
+        transaction_id: "'.$last_trans_id.'",
+        value: '.$grand_total.',
+        tax: '.$tax_amount.',
+        shipping: '.$shipping_amount.',
+        currency: "'.$currency_code.'",
+        coupon: "",
+         items: ['.$array_product.']
+}})';
+
+?>
+
+<script async src="https://www.googletagmanager.com/ns.html?id=GTM-N6NBZMS"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+<?php
+print_r($array_order);
+?>
+</script>
+<script>
+<?php
+print_r($gtag);
+?>
+</script>
+<?php } ?>

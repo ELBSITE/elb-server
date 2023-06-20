@@ -1,0 +1,31 @@
+<script type="text/x-magento-init">
+    {
+        "<element_selector>": {
+            "mage/gallery/gallery": {
+                "data": [{
+                    "thumb": "<small_image_url>",
+                    "img": "<small_image_url>",
+                    "full": "<small_image_url>",
+                    "caption": "<message>",
+                    "isMain": "<true/false>"
+                }],
+                "mixins": ["magnifier/magnify"],
+                "magnifierOpts": {
+                   "enabled": <true/false>,
+                   "eventType": "<hover/click>",
+                   "width": <number>,
+                   "height": <number>,
+                   "top": <number>,
+                   "left": <number>,
+                   "fullscreenzoom": <number>,
+                   "mode": "<outside/inside>"
+                }
+            }
+        }
+    }
+</script>
+<var name="magnifier">
+    <var name="%magnifier_option1%">%option1_value%</var>
+    <var name="%magnifier_option2%">%option2_value%</var>
+...
+</var>

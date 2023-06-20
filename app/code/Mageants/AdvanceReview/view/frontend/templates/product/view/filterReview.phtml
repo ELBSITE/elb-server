@@ -1,0 +1,165 @@
+<?php 
+/**
+ * @category Mageants AdvanceReview
+ * @package Mageants_AdvanceReview
+ * @copyright Copyright (c) 2018 Mageants
+ * @author Mageants Team <support@mageants.com>
+ */
+$blockObject = $block->getLayout()->createBlock('Mageants\AdvanceReview\Block\FilterReview');
+
+$format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
+$_items=$blockObject->filterData()->getItems();
+?> 
+<?php foreach ($_items as $_review): ?>
+    <li class="item review-item" itemscope itemprop="review">
+            <?php if (count($_review->getRatingVotes())): ?>
+                <div class="review-ratings">
+                <?php foreach ($_review->getRatingVotes() as $_vote): ?>
+                <div class="rating-summary item" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+                    <div class="rating-result" title="<?php echo $_vote->getPercent() ?>%">
+                        <meta itemprop="worstRating" content = "1"/>
+                        <meta itemprop="bestRating" content = "100"/>
+                        <span style="width:<?php echo $_vote->getPercent() ?>%">
+                            <span itemprop="ratingValue"><?php echo $_vote->getPercent() ?>%</span>
+                        </span>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+                </div>
+                <div class="review-title" style="display: inline-block;" itemprop="name"><?php echo $block->escapeHtml($_review->getTitle()) ?></div>
+                <div>
+                    <?php if($_review->getVerifiedPurchase()): ?>
+                        <span style="color: #c45500;" >Verified Purchase</span>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+        
+        <div class="review-details" style="margin-left: 0;">
+            <p class="review-author">
+                <span class="review-details-label"><?php echo __('Review by')?></span>
+                <strong class="review-details-value" itemprop="author"><?php echo $block->escapeHtml($_review['nickname']); ?></strong>
+            </p>
+            <p class="review-date">
+                <span class="review-details-label" style="position: relative;"><?php echo __('On') ?></span>
+                <time class="review-details-value" itemprop="datePublished" datetime="<?php echo $block->formatDate($_review['created_at'], $format) ?>"><?php echo $block->formatDate($_review['created_at'], $format) ?></time>
+            </p>
+        </div>
+        <div class="review-content" itemprop="description" style="margin-left: 0;">
+            <?php echo nl2br($block->escapeHtml($_review['detail'])) ?>
+        </div>
+        <div>
+            <?php if(!empty($_review['image_video'])) : ?> 
+                <?php
+                    $filenm = array();
+                    $filenm = explode(", ", $_review['image_video']); 
+                ?>
+                <?php foreach ($filenm as $imgnm) : ?>
+                    <?php
+                        $video=['mp4', '3gp', 'avi', 'webm'];
+                        $extenstion = substr($blockObject->geMediaUrl($imgnm), strrpos($blockObject->geMediaUrl($imgnm), ".") + 1);
+                        if(in_array($extenstion, $video)){
+                    ?>
+                    <a href="#reviewModal<?php echo $_review['review_id']; ?>" rel="modal:open">
+                        <video width="250" height="250" controls>
+                          <source src="<?php echo $blockObject->geMediaUrl($imgnm); ?>" type="video/mp4">
+                          Your browser does not support the video tag.
+                        </video>
+                    </a>
+                    <?php
+                    }
+                    else{ ?>
+                    <a href="#reviewModal<?php echo $_review['review_id']; ?>" rel="modal:open">
+                        <img src="<?php echo $blockObject->geMediaUrl($imgnm); ?>" height="150px" width="150px" >
+                    </a>
+                    <?php } ?>
+                <?php endforeach; ?>
+                <div id="reviewModal<?php echo $_review['review_id']; ?>" class="modal">
+                    <div class="popup-content">
+                        <div class="popupslider">
+                            <div class="owl-carousel owl-theme">
+                                <?php foreach ($filenm as $imgnm) : ?>
+                                    <?php
+                                        $video=['mp4', '3gp', 'avi', 'webm'];
+                                        $extenstion = substr($blockObject->geMediaUrl($imgnm), strrpos($blockObject->geMediaUrl($imgnm), ".") + 1);
+                                        if(in_array($extenstion, $video)){
+                                    ?>
+                                    <div class="item">
+                                        <video width="320" height="240" controls>
+                                            <source src="<?php echo $blockObject->geMediaUrl($imgnm); ?>" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </div>
+                                    <?php
+                                    }
+                                    else{ ?>
+                                    <div class="item">    
+                                        <img src="<?php echo $blockObject->geMediaUrl($imgnm); ?>" alt="...">
+                                    </div>
+                                    <?php } ?>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                        <div class="popup-details">
+                            <div class="review-ratings">
+                                <div class="rating-summary item" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+                                    <div class="rating-result" title="<?php  echo $_review['review_percent']; ?>%">
+                                        <meta itemprop="worstRating" content = "1"/>
+                                        <meta itemprop="bestRating" content = "100"/>
+                                        <span style="width:<?php echo $_review['review_percent']; ?>%">
+                                            <span itemprop="ratingValue"><?php echo $_review['review_percent']; ?>%</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="review-title" itemprop="name"><?php echo $block->escapeHtml($_review['title']) ?></div>
+                            <div>
+                                <?php if($_review['verified_purchase']): ?>
+                                    <span style="color: #c45500;" >Verified Purchase</span>
+                                <?php endif; ?>
+                            </div>
+                            <div class="review-details" style="margin-left: 0;">
+                                <p class="review-author">
+                                    <span class="review-details-label"><?php echo __('Review by')?></span>
+                                    <strong class="review-details-value" itemprop="author"><?php echo $block->escapeHtml($_review['nickname']); ?></strong>
+                                </p>
+                                <p class="review-date">
+                                    <span class="review-details-label" style="position: relative;"><?php echo __('On') ?></span>
+                                    <time class="review-details-value" itemprop="datePublished" datetime="<?php echo $block->formatDate($_review['created_at'], $format) ?>"><?php echo $block->formatDate($_review['created_at'], $format) ?></time>
+                                </p>
+                            </div>
+                            <div class="review-content" itemprop="description" style="margin-left: 0;">
+                                <?php echo nl2br($block->escapeHtml($_review['detail'])) ?>
+                            </div>
+                            <div class="btn-help-nothelp">
+                                <input type="hidden" id="reviewid" value="<?php echo $_review['review_id']; ?>">
+                                <div class="btn-help">
+                                    <span><i class="fa fa-thumbs-o-up" aria-hidden="true"></i></span>
+                                    <span id="likevotes<?php echo $_review['review_id']; ?>"><?php echo $blockObject->getLikeCount($_review['review_id']); ?></span>
+                                </div>
+                                <div class="btn-nothelp">
+                                    <span><i class="fa fa-thumbs-o-down" aria-hidden="true"></i></span>
+                                    <span id="dislikevotes<?php echo $_review['review_id']; ?>"><?php echo $blockObject->getDislikeCount($_review['review_id']); ?></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
+        <div class="btn-help-nothelp">
+            <input type="hidden" id="reviewid" value="<?php echo $_review['review_id']; ?>">
+            <div class="btn-help">
+                <span><i class="fa fa-thumbs-o-up" aria-hidden="true"></i></span>
+                <span id="likevotes<?php echo $_review['review_id']; ?>"><?php echo $blockObject->getLikeCount($_review['review_id']); ?></span>
+            </div>
+            <div class="btn-nothelp">
+                <span><i class="fa fa-thumbs-o-down" aria-hidden="true"></i></span>
+                <span id="dislikevotes<?php echo $_review['review_id']; ?>"><?php echo $blockObject->getDislikeCount($_review['review_id']); ?></span>
+            </div>
+        </div>
+    </li>
+<?php endforeach; ?>
+
+<?php if ($blockObject->getPagerHtml()): ?>
+    <div class="toolbar review-toolbar"><?php echo $blockObject->getPagerHtml(); ?></div>
+<?php endif ?>

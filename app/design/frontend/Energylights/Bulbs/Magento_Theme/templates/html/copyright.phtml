@@ -1,0 +1,13 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('footer_small')->toHtml(); ?>
+<small class="copyright">
+    <div class="footer-small-main">
+    <span><?= /* @escapeNotVerified */ str_replace ( '{{year}}', date('Y'), $block->getCopyright()) ?></span>
+    <?php echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('footer-payment')->toHtml(); ?>
+	</div>
+</small>

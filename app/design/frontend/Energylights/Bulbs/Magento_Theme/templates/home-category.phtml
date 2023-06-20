@@ -1,0 +1,178 @@
+<?php
+	  $categoryId = 48;
+	  $_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+	  $category = $_objectManager->create('Magento\Catalog\Model\Category')->load($categoryId);
+      $categoryname1= $category->getName();
+	  $categoryurl1= $category->getUrl();
+	  $_outputhelper= $this->helper('Magento\Catalog\Helper\Output');
+	  $_imgHtml   = '';
+	  if ($_imgUrl = $category->getImageUrl()) {
+
+	   $_imgHtml = '<img src="' . $_imgUrl . '" />';
+	   $_imgHtml = $_outputhelper->categoryAttribute($category, $_imgHtml, 'image');
+	   }
+?>
+<?php
+	  $categoryId = 251;
+	  $_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+	  $category = $_objectManager->create('Magento\Catalog\Model\Category')->load($categoryId);
+      $categoryname2= $category->getName();
+	  $categoryurl2= $category->getUrl();
+	  $_outputhelper= $this->helper('Magento\Catalog\Helper\Output');
+	  $_imgHtml1   = '';
+	  if ($_imgUrl1 = $category->getImageUrl()) {
+
+	   $_imgHtml1 = '<img src="' . $_imgUrl1 . '" />';
+	   $_imgHtml1 = $_outputhelper->categoryAttribute($category, $_imgHtml1, 'image');
+	   }
+?>
+<?php
+	  $categoryId = 53;
+	  $_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+	  $category = $_objectManager->create('Magento\Catalog\Model\Category')->load($categoryId);
+      $categoryname3= $category->getName();
+	  $categoryurl3= $category->getUrl();
+	  $_outputhelper= $this->helper('Magento\Catalog\Helper\Output');
+	  $_imgHtml2   = '';
+	  if ($_imgUrl2 = $category->getImageUrl()) {
+
+	   $_imgHtml2 = '<img src="' . $_imgUrl2 . '" />';
+	   $_imgHtml2 = $_outputhelper->categoryAttribute($category, $_imgHtml2, 'image');
+	   }
+?>
+<?php
+	  $categoryId = 272;
+	  $_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+	  $category = $_objectManager->create('Magento\Catalog\Model\Category')->load($categoryId);
+      $categoryname4= $category->getName();
+	  $categoryurl4= $category->getUrl();
+	  $_outputhelper= $this->helper('Magento\Catalog\Helper\Output');
+	  $_imgHtml3   = '';
+	  if ($_imgUrl3 = $category->getImageUrl()) {
+
+	   $_imgHtml3 = '<img src="' . $_imgUrl3 . '" />';
+	   $_imgHtml3 = $_outputhelper->categoryAttribute($category, $_imgHtml3, 'image');
+	   }
+?>
+<?php
+	  $categoryId = 192;
+	  $_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+	  $category = $_objectManager->create('Magento\Catalog\Model\Category')->load($categoryId);
+      $categoryname5= $category->getName();
+	  $categoryurl5= $category->getUrl();
+	  $_outputhelper= $this->helper('Magento\Catalog\Helper\Output');
+	  $_imgHtml4   = '';
+	  if ($_imgUrl4 = $category->getImageUrl()) {
+
+	   $_imgHtml4 = '<img src="' . $_imgUrl4 . '" />';
+	   $_imgHtml4 = $_outputhelper->categoryAttribute($category, $_imgHtml4, 'image');
+	   }
+?>
+<?php
+	  $categoryId = 100;
+	  $_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+	  $category = $_objectManager->create('Magento\Catalog\Model\Category')->load($categoryId);
+      $categoryname6= $category->getName();
+	  $categoryurl6= $category->getUrl();
+	  $_outputhelper= $this->helper('Magento\Catalog\Helper\Output');
+	  $_imgHtml5   = '';
+	  if ($_imgUrl5 = $category->getImageUrl()) {
+
+	   $_imgHtml5 = '<img src="' . $_imgUrl5 . '" />';
+	   $_imgHtml5 = $_outputhelper->categoryAttribute($category, $_imgHtml5, 'image');
+	   }
+?>
+<div class="dz_featcat">
+<ul class="featlist clearfix">
+	<li onclick="window.open('<?php echo $categoryurl1; ?>', '_self');">
+		<div class="feat-cat-contain">
+            <div class="dz_imgcontainer">
+            <a href="<?php echo $categoryurl1; ?>" title="<?php echo $categoryname1; ?>" alt="<?php echo $categoryname1; ?>">
+            <?php echo $_imgHtml ?>
+            </a>
+            </div>
+            <div class="dz_desc_container">
+            <div class="desc_content">
+            <div class="desc_title"><a href="<?php echo $categoryurl1; ?>" title="<?php echo $categoryname1; ?>" alt="<?php echo $categoryname1; ?>"><?php echo $categoryname1; ?></a></div>
+            </div>
+            <a href="<?php echo $categoryurl1; ?>" title="Bathroom Lighting" alt="Bathroom Lighting" class="dz_view">View more &gt; </a>
+            </div>
+        </div>
+    </li>
+    <li onclick="window.open('<?php echo $categoryurl2; ?>', '_self');">
+		<div class="feat-cat-contain">
+            <div class="dz_imgcontainer">
+            <a href="<?php echo $categoryurl2; ?>" title="<?php echo $categoryname2; ?>" alt="<?php echo $categoryname2; ?>">
+            <?php echo $_imgHtml1 ?>
+            </a>
+            </div>
+            <div class="dz_desc_container">
+            <div class="desc_content">
+            <div class="desc_title"><a href="<?php echo $categoryurl2; ?>" title="<?php echo $categoryname2; ?>" alt="<?php echo $categoryname2; ?>"><?php echo $categoryname2; ?></a></div>
+            </div>
+            <a href="<?php echo $categoryurl2; ?>" title="Bathroom Lighting" alt="Bathroom Lighting" class="dz_view">View more &gt; </a>
+            </div>
+        </div>
+    </li>
+    <li onclick="window.open('<?php echo $categoryurl3; ?>', '_self');">
+		<div class="feat-cat-contain">
+            <div class="dz_imgcontainer">
+            <a href="<?php echo $categoryurl3; ?>" title="<?php echo $categoryname3; ?>" alt="<?php echo $categoryname3; ?>">
+             <?php echo $_imgHtml2 ?>
+            </a>
+            </div>
+            <div class="dz_desc_container">
+            <div class="desc_content">
+            <div class="desc_title"><a href="<?php echo $categoryurl3; ?>" title="<?php echo $categoryname3; ?>" alt="<?php echo $categoryname3; ?>"><?php echo $categoryname3; ?></a></div>
+            </div>
+            <a href="<?php echo $categoryurl3; ?>" title="Bathroom Lighting" alt="Bathroom Lighting" class="dz_view">View more &gt; </a>
+            </div>
+        </div>
+    </li>
+    <li onclick="window.open('<?php echo $categoryurl6; ?>', '_self');">
+		<div class="feat-cat-contain">
+            <div class="dz_imgcontainer">
+            <a href="<?php echo $categoryurl6; ?>" title="<?php echo $categoryname6; ?>" alt="<?php echo $categoryname6; ?>">
+            <?php echo $_imgHtml5 ?>
+            </a>
+            </div>
+            <div class="dz_desc_container">
+            <div class="desc_content">
+            <div class="desc_title"><a href="<?php echo $categoryurl6; ?>" title="<?php echo $categoryname6; ?>" alt="<?php echo $categoryname6; ?>"><?php echo $categoryname6; ?></a></div>
+            </div>
+            <a href="<?php echo $categoryurl6; ?>" title="Bathroom Lighting" alt="Bathroom Lighting" class="dz_view">View more &gt; </a>
+            </div>
+        </div>
+    </li>
+    <li onclick="window.open('<?php echo $categoryurl4; ?>', '_self');">
+		<div class="feat-cat-contain">
+            <div class="dz_imgcontainer">
+            <a href="<?php echo $categoryurl4; ?>" title="<?php echo $categoryname4; ?>" alt="<?php echo $categoryname4; ?>">
+            <?php echo $_imgHtml4 ?>
+            </a>
+            </div>
+            <div class="dz_desc_container">
+            <div class="desc_content">
+            <div class="desc_title"><a href="<?php echo $categoryurl4; ?>" title="<?php echo $categoryname4; ?>" alt="<?php echo $categoryname4; ?>"><?php echo $categoryname4; ?></a></div>
+            </div>
+            <a href="<?php echo $categoryurl4; ?>" title="Bathroom Lighting" alt="Bathroom Lighting" class="dz_view">View more &gt; </a>
+            </div>
+        </div>
+    </li>
+    <li onclick="window.open('<?php echo $categoryurl5; ?>', '_self');">
+		<div class="feat-cat-contain">
+            <div class="dz_imgcontainer">
+            <a href="<?php echo $categoryurl5; ?>" title="<?php echo $categoryname5; ?>" alt="<?php echo $categoryname5; ?>">
+            <?php echo $_imgHtml5 ?>
+            </a>
+            </div>
+            <div class="dz_desc_container">
+            <div class="desc_content">
+            <div class="desc_title"><a href="<?php echo $categoryurl5; ?>" title="<?php echo $categoryname5; ?>" alt="<?php echo $categoryname5; ?>"><?php echo $categoryname5; ?></a></div>
+            </div>
+            <a href="<?php echo $categoryurl5; ?>" title="Bathroom Lighting" alt="Bathroom Lighting" class="dz_view">View more &gt; </a>
+            </div>
+        </div>
+    </li>	
+</ul>
+</div>

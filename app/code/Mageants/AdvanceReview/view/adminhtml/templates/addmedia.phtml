@@ -1,0 +1,40 @@
+				<input type="hidden" name="verified_purchase" value="<?php { echo "0"; } ?>"/>
+
+				<div class="field review-field-nickname">
+                        <label for="file" class="label"><span><?php echo __('Add a photo or video') ?></span></label>
+                        <div class="control" id="control">
+                            <input type="file" name="image_video[0]" id="img_video_field" class="input-text"  accept="image/*, video/*" />
+                            <button type="button" id="add" onclick="addField(this)"><span>+</span></button>
+                            <button type="button" id="del" onclick="delField()">x</button>
+                        </div>
+                    </div>
+                <script type="text/javascript">
+                var i = 0;
+                function addField(img) {
+                    if(i < 9){
+                        i++;
+                        img = document.getElementById('control');
+                        var br = document.createElement("br");
+                        br.id = "br_" + i;
+                        
+                        var input = document.createElement("input");
+                        input.type = "file";
+                        input.name = "image_video["+i+"]";
+                        input.id = "img_video_" + i;
+                        input.class = "input-text";
+                        input.accept = "image/*, video/*";
+                        img.appendChild(input);
+                        img.appendChild(br);
+                    }
+                }
+                function delField() {
+                    if (document.getElementById("img_video_1") == null) {
+                        document.getElementById("img_video_field").value = "";
+                    }
+                    if (i > 0) {
+                        document.getElementById("img_video_" + i).remove();
+                        document.getElementById("br_" + i).remove();
+                        i--;
+                    }
+                }
+            </script>

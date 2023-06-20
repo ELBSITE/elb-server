@@ -1,0 +1,275 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+use Magento\Framework\App\Action\Action;
+
+?>
+<?php
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+
+/**
+ * Product list template
+ *
+ * @var $block \Magento\Catalog\Block\Product\ListProduct
+ */
+?>
+<?php
+$_productCollection = $block->getLoadedProductCollection();
+$_helper = $this->helper(Magento\Catalog\Helper\Output::class);
+?>
+<?php if (!$_productCollection->count()) :?>
+    <div class="message info empty"><div><?= $block->escapeHtml(__('We can\'t find products matching the selection.')) ?></div></div>
+<?php else :?>
+    <?= $block->getToolbarHtml() ?>
+    <?= $block->getAdditionalHtml() ?>
+    <?php
+    if ($block->getMode() == 'grid') {
+        $viewMode = 'grid';
+        $imageDisplayArea = 'category_page_grid';
+        $showDescription = false;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+    } else {
+        $viewMode = 'list';
+        $imageDisplayArea = 'category_page_list';
+        $showDescription = true;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
+    }
+    /**
+     * Position for actions regarding image size changing in vde if needed
+     */
+    $pos = $block->getPositioned();
+    ?>
+    <div class="products wrapper <?= /* @noEscape */ $viewMode ?> products-<?= /* @noEscape */ $viewMode ?>">
+        <ol class="products list items product-items">
+            <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
+            <?php foreach ($_productCollection as $_product) :?>
+            <li class="item product product-item">
+                <div class="product-item-info" data-container="product-<?= /* @noEscape */ $viewMode ?>">
+                    <?php
+                    $productImage = $block->getImage($_product, $imageDisplayArea);
+                    if ($pos != null) {
+                        $position = ' style="left:' . $productImage->getWidth() . 'px;'
+                            . 'top:' . $productImage->getHeight() . 'px;"';
+                    }
+                    ?>
+                    <?php // Product Image ?>
+                    <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"
+                       class="product photo product-item-photo"
+                       tabindex="-1">
+                        <?= $productImage->toHtml() ?>
+                    </a>
+                    <div class="product details product-item-details">
+                        <?php
+                            $_productNameStripped = $block->stripTags($_product->getName(), null, true);
+                        ?>
+                        <strong class="product name product-item-name">
+                            <a class="product-item-link"
+                               href="<?= $block->escapeUrl($_product->getProductUrl()) ?>">
+                                <?= /* @noEscape */ $_helper->productAttribute($_product, $_product->getName(), 'name') ?>
+                            </a>
+                        </strong>
+                        <?= $block->getReviewsSummaryHtml($_product, $templateType) ?>
+                        <?= /* @noEscape */ $block->getProductPrice($_product) ?>
+                        <?php if ($_product->isAvailable()) :?>
+                            <?= $block->getProductDetailsHtml($_product) ?>
+                        <?php endif; ?>
+ 
+                        <div class="product-item-inner">
+                             <span class="hidefortext123"></span>
+                            <div class="product actions1 product-item-actions">
+                                <div class="actions-primary">
+                                    <?php if ($_product->isSaleable()) :?>
+                                        <?php $postParams = $block->getAddToCartPostParams($_product); ?>
+                                        <form data-role="tocart-form"
+                                              data-product-sku="<?= $block->escapeHtmlAttr($_product->getSku()) ?>"
+                                              action="<?= $block->escapeUrl($postParams['action']) ?>"
+                                              method="post">
+                                            <input type="hidden"
+                                                   name="product"
+                                                   value="<?= /* @noEscape */ $postParams['data']['product'] ?>">
+                                            <input type="hidden" name="<?= /* @noEscape */ Action::PARAM_NAME_URL_ENCODED ?>"
+                                                   value="<?= /* @noEscape */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED] ?>">
+                                            <?= $block->getBlockHtml('formkey') ?>
+                                            <button type="submit"
+                                                    title="<?= $block->escapeHtmlAttr(__('Add to Basket')) ?>"
+                                                    class="action tocart primary">
+                                                <span class="hidefortext"></span>
+                                            </button>
+                                        </form>
+                                    <?php else :?>
+                                        <?php if ($_product->isAvailable()) :?>
+                                            <div class="stock available"><span><?= $block->escapeHtml(__('In stock')) ?></span></div>
+                                        <?php else :?>
+                                            <div class="stock unavailable"><span><?= $block->escapeHtml(__('Out of stock')) ?></span></div>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <?php endforeach; ?>
+        </ol>
+    </div>
+    <?= $block->getToolbarHtml() ?>
+    <?php if (!$block->isRedirectToCartEnabled()) :?>
+        <script type="text/x-magento-init">
+        {
+            "[data-role=tocart-form], .form.map.checkout": {
+                "catalogAddToCart": {
+                    "product_sku": "<?= $block->escapeJs($_product->getSku()) ?>"
+                }
+            }
+        }
+        </script>
+    <?php endif; ?>
+<?php endif; ?>
+<style>
+
+h1.category_pagetitle { display: none;}
+a.minimal-price-link span {
+    display: none;
+}
+
+.stock.unavailable {
+    color: #fff;
+    padding: 12px;
+}
+
+.column.main {  padding-top: 45px;}
+.pages .next, .pages .previous {
+    width: 10px;
+    border: none;
+    background: transparent;
+    margin: 0px !important;
+    border: 0;
+    box-shadow: none !important;
+    height: 16px;
+    vertical-align: middle;
+}
+.pages a, .pages .current, .pages .current:hover {
+    width: 15px;
+    height: 38px;
+    line-height: 2.5;
+}
+.pages {
+    margin-left: 15px;
+}
+
+
+div#layered-filter-block {  display: none;}
+.breadcrumbs a:visited {  color: #333;}
+.catalog-category-view  ol.products.list.items.product-items { max-width: 960px;  right: 0; margin: 0 0 0 auto;}
+.catalog-category-view .toolbar { border: none;  background: #F4F4F4; padding: 10px 10px 6px; margin: 0 0 20px auto; max-width: 960px; right: 0;}
+.page-products .toolbar .limiter {  display: block;	float: right;}
+.products.wrapper~.toolbar .sorter {  display: block;}
+.products.wrapper~.toolbar .modes { display: block;}
+.products.wrapper~.toolbar .toolbar-amount { display: block;}
+.catalog-category-view .sorter {    float: left;}
+.page-products.page-layout-1column .products-grid .product-item {
+    width: 24.25%;
+    margin-right: 1%;
+    border: 1px solid #CDCDCD;
+    border-radius: 5px;
+    margin-bottom: 12px;
+    background: transparent !important;
+    text-align: center;
+}
+.page-products .products-grid .product-item:nth-child(4n + 4) {
+    margin-right: 0;
+}
+.products-grid .product-item-info:hover, .products-grid .product-item-info.active {     box-shadow: none; margin: 0;  padding: 0;  border: none;}
+.page-products.page-layout-1column .products-grid .product-item:hover {
+    border-color: #ff6500;
+}
+
+.catalog-category-view .product-item-name {
+    min-height: 90px;
+    max-height: 90px;
+    overflow: hidden;
+    text-decoration: none !important;
+    text-transform: uppercase;
+}
+.product-item-name a:hover {
+    text-decoration: none;
+}
+
+.products-list .product-item {
+    display: table;
+    width: 100%;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ededed;
+}
+.products-list .price-box.price-final_price {
+    text-align: right;
+    float: right;
+    margin-top: -21px;
+    margin-right: 10px;
+}
+.products-list .product.product-item-actions {
+    text-align: right;
+    float: right;
+    margin-top: -21px;
+    margin-right: 10px;
+    display: block;
+    width: 100%;
+}
+
+.catalog-category-view .products-list .product-item-name {
+    min-height: auto;    font-size: 18px;
+    text-transform: capitalize;
+}
+.products-list .price-box.price-final_price {
+    text-align: right;
+    float: right;
+    margin-top: -21px;
+    margin-right: 10px;
+    vertical-align: top;
+    font-family: "Open Sans",sans-serif;
+    color: #ff740d;
+}
+
+.products-list .product-item .tocart:hover{    background: rgb(89,89,89); border: 1px solid transparent; box-shadow: 0px 1px 1px 0px rgb(151,151,151) inset;}
+.products-list .product-item .tocart {
+    font-size: 1.3rem;    border-radius: 0;    line-height: 1;    padding-bottom: 10px;
+    padding-top: 10px;    white-space: nowrap;    border: 1px solid rgb(104,168,4)!important;
+    box-shadow: 0px 1px 1px 0px rgb(183,224,6) inset;    border-radius: 4px;
+    font-size: 17px;    font-weight: 600;    margin: 0px;    padding: 10px 35px;
+    background: -webkit-linear-gradient(rgb(128,194,7),rgb(119,188,5),rgb(100,174,3));
+    text-transform: uppercase;
+}
+.price-container .price {
+    font-size: 18px;
+	
+	 color: #ff740d;
+}
+
+@media screen and (max-width: 800px) {
+.products-list .price-box.price-final_price {  text-align: left;  float: none; margin-top: 0;}
+.products-list .product.product-item-actions { text-align: left; float: none; margin-top: 0;}
+}
+@media screen and (max-width: 767px) {
+.catalog-category-view .sorter { position: relative;}
+.modes {   display: block;}
+.catalog-category-view .products.wrapper.grid.products-grid .product-item-inner {    display: none;}	
+}
+
+@media screen and (max-width: 639px) {
+	.page-products.page-layout-1column .products-grid .product-item {
+    width: 47.50%;}
+}
+
+@media screen and (max-width: 350px) {
+	.page-products.page-layout-1column .products-grid .product-item {  width: 100%;}
+	.page-products .product-item-info { margin: 0 auto;}
+}
+</style>
+
+
+
+

@@ -1,0 +1,299 @@
+/**
+ * @category Mageants AdvanceReview
+ * @package Mageants_AdvanceReview
+ * @copyright Copyright (c) 2018 Mageants
+ * @author Mageants Team <support@mageants.com>
+ */
+.rating{
+    width: 100%;
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px solid #c9c9c9;
+    padding: 10px 0;
+    margin-bottom: 10px;
+}
+.rating-title strong{
+    font-weight: 300;
+    line-height: 1.1;
+    font-size: 2.6rem;
+    margin-top: 2.5rem;
+    margin-bottom: 10px;
+}
+.ttlreview{
+    margin-left: 10px;
+    display: inline-block;
+}
+.ttlreview span{
+    font-size: 16px;
+}
+.ratingcon{
+    width: 30%;
+    float: left;
+    margin-top: 15px;
+}
+.avgrating{
+    text-align: center;
+    display: inline-block;
+}
+.avgrating > span {
+    font-size: 32px;
+}
+.ratecount{
+    text-align: center;
+}
+.ratecount > span {
+    font-size: 20px;
+    color: #878787;
+}
+.star{
+    width: 70%;
+    float: left;
+}
+.star ul{
+    padding: 0;
+    margin: 0;
+}
+.star ul li{
+    list-style: none;
+    display: inline-block;
+    width: 100%;
+    margin: 0;
+}
+.star ul li a:hover{
+    cursor: pointer;
+}
+.starcon{
+    text-align: center;
+    font-size: 16px;
+    color: #111;
+}
+.ratingbarcon{
+    margin-right: 10px;
+    padding-top: 7px;
+}
+.ratingbar { 
+    height: 10px;
+    background: #f0f0f0;
+    -moz-border-radius: 25px;
+    -webkit-border-radius: 25px;
+    border-radius: 25px;
+    box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);
+}
+.ratingbar > span {
+  display: block;
+  height: 10px;
+  border-radius: 100px;
+  background-color: #388e3c;
+  background-image: linear-gradient(
+    center bottom,
+    rgb(43,194,83) 37%,
+    rgb(84,240,84) 69%
+  );
+  position: relative;
+  overflow: hidden;
+}
+._2starbar > span{
+    background-color: #ff9f00;
+}
+._1starbar > span{
+    background-color: #ff6161;
+}
+.trating{
+    font-size: 14px;
+    color: #878787;
+}
+.review-sort-filter{
+    width:100%;
+    margin-top: 10px;
+}
+.review-sort{
+    width: 20%;
+    display: inline-block;
+    float: left;
+    margin-right: 10px;
+}
+.review-sort .review-sort-title{
+    width:100%;
+    margin-bottom: 10px;
+}
+.review-filter .review-sort-content{
+    width:100%;
+}
+.review-filter{
+    width: 78%;
+    display: inline-block;
+}
+.review-filter .review-filter-title{
+    width:100%;
+    margin-bottom: 10px;
+}
+.review-filter .review-filter-content{
+    width:100%;
+}
+.review-filter .review-filter-content select{
+    width: 33%;
+}
+.owl-carousel .owl-nav button.owl-prev{
+	font-size: 35px;
+    float: left;
+    top: 50px;
+    left: -10px;
+    position: absolute;
+    opacity: 0.5;
+    width:50px;	
+}
+.owl-carousel .owl-nav button.owl-next{
+	font-size: 35px;
+    float: right;
+    top: 50px;
+    right: -10px;
+    position: absolute;
+    opacity: 0.5;
+    width:50px;
+}
+.owl-carousel .owl-nav button.owl-prev:hover{
+    opacity: 1;
+}
+.owl-carousel .owl-nav button.owl-next:hover{
+    opacity: 1;
+}
+.review-ratings{
+    margin-right: 10px;
+}
+.review-title{
+    margin: 0 0 5px 0;
+}
+.review-content{
+    margin-top: 10px;
+}
+.review-image-video{
+    margin-bottom: 10px;
+}
+.counthelpfull{
+    margin-bottom: 10px;
+}
+.counthelpfull span{
+    color: #767676;
+}
+.btn-help-nothelp{
+    width: 100%;
+    display: inline-block;
+}
+.btn-help-nothelp .btn-help{
+    float: left;
+    margin-right: 20px;
+}
+.btn-help-nothelp .btn-help span{
+    font-size: 20px;
+}
+.btn-help-nothelp .btn-nothelp{
+    display: inline-block;
+}
+.btn-help-nothelp .btn-nothelp span{
+    font-size: 20px;
+}
+.btn-help-nothelp .btn-help:hover, .btn-help-nothelp .btn-nothelp:hover{
+    cursor: pointer;
+    color: #0895f5;
+}
+.modal{
+    max-width: 700px !important;
+}
+.popup-content{
+    width: 100%;
+    display: inline-block;
+}
+.popupslider{
+    width: 50%;
+    display: inline-block;
+    float: left;
+}
+.popup-details{
+    width: 45%;
+    float: left;
+    display: inline-block;
+    padding: 10px 5px 10px 15px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+.review-button{
+    margin-top: 10px;
+}
+.field.review-field-nickname .control input{
+    margin-bottom: 6px;
+}
+@media only screen and (max-width: 767px) {
+    .ratingcon{
+        width: 100%;
+        border-bottom: 1px solid #c9c9c9;
+        margin-bottom: 15px;
+    }
+    .star{
+        width: 100%;
+    }
+    .review-sort{
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .review-filter{
+        width:100%;
+    }
+    .review-filter-content{
+        width:100%;
+        margin-bottom: 10px;
+    }
+    .review-filter .review-filter-content select {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .review-button{
+        margin-bottom: 10px;
+    }
+}
+@media screen and (max-width: 1040px) and (min-width: 768px) {
+    .review-filter .review-filter-content select {
+        width: 32%;
+    }
+}
+@media screen and (max-width: 767px) and (min-width: 640px) {
+    .ratingcon{
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .review-ratings{
+        width: 100%;
+    }
+    .avgrating{
+        width: 100%;
+        text-align: left;
+    }
+    .avgrating > span {
+        font-size: 26px;
+    }
+}
+@media only screen and (max-width: 639px) {
+    .avgrating{
+        margin-bottom: 10px;
+    }
+    .avgrating > span {
+        font-size: 26px;
+    }
+}
+@media only screen and (max-width: 639px) {
+    .popupslider{
+        width: 100%;
+    }
+    .popup-details{
+        width: 100%;
+    }
+}
+@media screen and (max-width: 910px) and (min-width: 768px) {
+    .avgrating > span {
+        font-size: 23px;
+    }
+}
+@media screen and (max-width: 1040px) and (min-width: 911px) {
+    .avgrating > span {
+        font-size: 28px;
+    }
+}

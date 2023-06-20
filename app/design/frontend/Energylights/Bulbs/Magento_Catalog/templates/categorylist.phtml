@@ -1,0 +1,155 @@
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$storeManager = $objectManager->get('\Magento\Store\Model\StoreManagerInterface');
+
+$categoriesids = $block->getData('categoriesids');
+if($categoriesids){ 
+$catarr = explode(',',$categoriesids);
+
+
+//print_r($catarr);
+?>
+
+
+<style>
+    .all_page_cats .top_cat {
+    width: 100%;
+    min-height: 150px;
+}
+
+li.all_page_cats_item {
+    width: 24%;
+    float: left;
+    margin-right: 1%;
+     box-shadow: 1px 0px 16px 0px rgb(0 0 0 / 15%);
+}
+li.all_page_cats_item:hover{box-shadow: 1px 0px 16px 0px rgb(0 0 0 / 65%); transition: 0.3s;}
+
+li.all_page_cats_item:nth-last-child(1) {
+  margin-right: 0%;
+}
+
+.all_page_cats .top_cat {
+    /* min-height: 248px; */
+
+    background-size: 100% 100% !important;
+    max-width: 200px;
+    background-repeat: no-repeat !important;
+    min-height: 200px;
+    margin: 0 auto;
+}
+
+
+li.all_page_cats_item {list-style-type: none;}
+.all_page_cats {
+    margin: 50px 0;
+    float: left;
+    width: 100%; text-align: center;
+}
+
+
+
+.all_page_cats_item a.button {
+    border-radius: 7px;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 600;
+    background: #ff740d;
+    box-shadow: 0px 1px 1px 0px #ff740d;
+    padding: 10px !important;
+    border: 0;
+    margin-top: 7px !important;
+    color: #fff !important;
+    margin: 0 auto;
+    width: 100%;
+    display: block;
+    max-width: 150px;    margin-bottom: 20px;
+}
+li.all_page_cats_item a {
+    padding: 10px !important;
+    display: block;
+}
+
+.all_page_cats_item .bottom_cat {
+    text-transform: uppercase;
+    color: #2eb3d4 !important;
+    font-size: 17px;
+    font-family: 'Open Sans';
+    text-transform: capitalize;
+    font-size: 16px;
+    margin: 15px 0 0;
+    text-decoration: none !important;
+}
+
+li.all_page_cats_item a:hover{
+	text-decoration: none !important;
+}
+
+
+@media only screen and (max-width: 990px) { 
+li.all_page_cats_item { width: 48%;);}
+}
+@media only screen and (max-width: 565px) { 
+li.all_page_cats_item { width: 99%;);}
+}
+</style>
+
+<section>
+    <div class="all_page_cats">
+        <?php foreach($catarr as $cat){ 
+        $_category = $objectManager->create('Magento\Catalog\Model\Category')->load($cat);
+        
+        if($_category != ''){
+        $cat_url = $_category->getUrl();
+        $_imgUrl = '';
+		if(isset($_category->getData()["thumbnail"])){
+		    
+        
+        if(strpos($_category->getData()["thumbnail"], '/pub/media/catalog/tmp/category/') !== false) {
+         $image_url = $_category->getData()["thumbnail"];
+         $_imgUrl = $image_url;
+        }else {
+         $image_url = str_replace('/pub/media/catalog/category/', '', $_category->getData()["thumbnail"]);
+         $_imgUrl = '/pub/media/catalog/category/'.$image_url;
+        }
+	
+		}
+		
+        if(strpos($_category->getData()["thumbnail"], '/tmp/category/') !== false) {
+        //if($_imgUrl){
+          $_imgUrl;
+          $image_url = str_replace('/pub/media/catalog/category//media/', '/pub/media/',  $_imgUrl);
+        }else{
+			$_imgUrl = $storeManager->getStore()->getBaseUrl().'pub/media/small_image.jpg';
+		}
+		
+		if($cat == 255){
+		    	$_imgUrl = '/pub'.$_category->getData()["thumbnail"];
+		    
+		}
+		
+		?>
+        <li class="all_page_cats_item">
+            
+				<a class="link catname" href="<?php echo $cat_url; ?>">
+				
+				<div class="top_cat" style="background: url('<?php echo $_imgUrl; ?>');" ></div>
+				<div class="bottom_cat">
+				<?php echo $_category->getName(); ?>
+				</div>
+				
+				</a>
+				<a class="button"  href="<?php echo $cat_url; ?>" >Shop Now</a>
+        </li>
+    
+        <?php  } } ?>
+        
+    </div>
+</section>
+
+    
+    
+<?php    
+}
+
+?>

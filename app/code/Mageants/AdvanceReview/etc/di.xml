@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!-- 
+/**
+ * @category Mageants AdvanceReview
+ * @package Mageants_AdvanceReview
+ * @copyright Copyright (c) 2018 Mageants
+ * @author Mageants Team <support@mageants.com>
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Review\Controller\Product\Post" type="Mageants\AdvanceReview\Controller\Product\Post" />
+    <preference for="Magento\Review\Controller\Adminhtml\Product\Save" type="Mageants\AdvanceReview\Controller\Adminhtml\Product\Save" />
+    <preference for="Magento\Review\Block\Adminhtml\Edit\Form" type="Mageants\AdvanceReview\Block\Adminhtml\Edit\Form" />
+    <preference for="Magento\Review\Block\Adminhtml\Add\Form" type="Mageants\AdvanceReview\Block\Adminhtml\Add\Form" />
+    <preference for="Magento\Review\Controller\Adminhtml\Product\Post" type="Mageants\AdvanceReview\Controller\Adminhtml\Product\Post" />
+    <preference for="Magento\Review\Model\ResourceModel\Review" type="Mageants\AdvanceReview\Model\ResourceModel\Review" />
+    <preference for="\Magento\Review\Model\ResourceModel\Review\Collection" type="Mageants\AdvanceReview\Model\ResourceModel\Review\Collection" />
+</config>

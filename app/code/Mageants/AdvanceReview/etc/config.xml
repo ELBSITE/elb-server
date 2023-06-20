@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!-- 
+/**
+ * @category Mageants AdvanceReview
+ * @package Mageants_AdvanceReview
+ * @copyright Copyright (c) 2018 Mageants
+ * @author Mageants Team <support@mageants.com>
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <advancereview>
+            <general>
+                <enable_frontend>0</enable_frontend>
+                <Only_purchase_Review>0</Only_purchase_Review>
+            </general>   
+        </advancereview>
+    </default>
+</config>

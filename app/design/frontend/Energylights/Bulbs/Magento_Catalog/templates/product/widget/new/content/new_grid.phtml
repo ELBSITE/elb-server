@@ -1,0 +1,348 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/**
+ * Template for displaying new products widget
+ *
+ * @var $block \Magento\Catalog\Block\Product\Widget\NewWidget
+ */
+
+// phpcs:disable Magento2.Files.LineLength.MaxExceeded
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+
+if ($exist = ($block->getProductCollection() && $block->getProductCollection()->getSize())) {
+    $type = 'widget-new-grid';
+
+    $mode = 'grid';
+
+    $image = 'new_products_content_widget_grid';
+    $title = __('New Products');
+    $items = $block->getProductCollection()->getItems();
+
+    $showWishlist = true;
+    $showCompare = true;
+    $showCart = true;
+    $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::DEFAULT_VIEW;
+    $description = false;
+}
+?>
+
+<?php if ($exist) :?>
+    <div class=" customnewproducts  block widget block-new-products <?= /* @noEscape */ $mode ?>">
+
+        <div class="block-content">
+            <?= /* @noEscape */ '<!-- ' . $image . '-->' ?>
+            <div class="products-<?= /* @noEscape */ $mode ?> <?= /* @noEscape */ $mode ?>">
+                <ol class="product-items <?= /* @noEscape */ $type ?>">
+                    <?php foreach ($items as $_item) :?>
+                    <li class="product-item">
+                        <div class="product-item-info">
+                            <a href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>"
+                               class="product-item-photo">
+                                <?= $block->getImage($_item, $image)->toHtml() ?>
+                            </a>
+                            <div class="product-item-details">
+                                <strong class="product-item-name">
+                                    <a title="<?= $block->escapeHtmlAttr($_item->getName()) ?>"
+                                       href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>"
+                                       class="product-item-link">
+                                        <?= $block->escapeHtml($_item->getName()) ?>
+                                    </a>
+                                </strong>
+								
+								  <?php if ($templateType) :?>
+                                    <?= $block->getReviewsSummaryHtml($_item, $templateType) ?>
+                                <?php endif; ?>
+								
+                                <?= $block->getProductPriceHtml($_item, $type); ?>
+
+                              
+
+                                <?php if ($showWishlist || $showCompare || $showCart) :?>
+                                    <div class="product-item-actions">
+                                       
+                                        
+                                        <span class="hidefortext123"></span>
+                                        
+                                        <?php if ($showCart) :?>
+                                            <div class="actions-primary">
+                                                <?php if ($_item->isSaleable()) :?>
+                                                    <?php if (!$_item->getTypeInstance()->isPossibleBuyFromList($_item)) :?>
+                                                        <button class="action tocart primary"
+                                                                data-mage-init='{"redirectUrl":{"url":"<?= $block->escapeUrl($block->getAddToCartUrl($_item)) ?>"}}'
+                                                                type="button"
+                                                                title="<?= $block->escapeHtmlAttr(__('Add to Basket')) ?>">
+                                                            <span class="hidefortext"></span>
+                                                        </button>
+                                                    <?php else :?>
+                                                        <?php
+                                                            $postDataHelper = $this->helper(Magento\Framework\Data\Helper\PostHelper::class);
+                                                            $postData = $postDataHelper->getPostData(
+                                                                $block->escapeUrl($block->getAddToCartUrl($_item)),
+                                                                ['product' => (int) $_item->getEntityId()]
+                                                            )
+                                                        ?>
+                                                        <button class="action tocart primary"
+                                                                data-post='<?= /* @noEscape */ $postData ?>'
+                                                                type="button"
+                                                                title="<?= $block->escapeHtmlAttr(__('Add to Basket')) ?>">
+                                                           <span class="hidefortext"></span>
+                                                        </button>
+                                                    <?php endif; ?>
+                                                <?php else :?>
+                                                    <?php if ($_item->getIsSalable()) :?>
+                                                        <div class="stock available">
+                                                            <span><?= $block->escapeHtml(__('In stock')) ?></span>
+                                                        </div>
+                                                    <?php else :?>
+                                                        <div class="stock unavailable">
+                                                            <span><?= $block->escapeHtml(__('Out of stock')) ?></span>
+                                                        </div>
+                                                    <?php endif; ?>
+                                                <?php endif; ?>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                     </li>
+                    <?php endforeach ?>
+                </ol>
+            </div>
+            <?= $block->getPagerHtml() ?>
+        </div>
+    </div>
+<?php endif;?>
+
+
+
+<style>
+
+h1.category_pagetitle { display: none;}
+a.minimal-price-link span {
+    display: none;
+}
+
+.stock.unavailable {
+    color: #fff;
+    padding: 12px;
+}
+
+.column.main {  padding-top: 45px;}
+.pages .next, .pages .previous {
+    width: 10px;
+    border: none;
+    background: transparent;
+    margin: 0px !important;
+    border: 0;
+    box-shadow: none !important;
+    height: 16px;
+    vertical-align: middle;
+}
+.pages a, .pages .current, .pages .current:hover {
+    width: 15px;
+    height: 38px;
+    line-height: 2.5;
+}
+.pages {
+    margin-left: 15px;
+}
+
+
+div#layered-filter-block {  display: none;}
+.breadcrumbs a:visited {  color: #333;}
+.catalog-category-view  ol.products.list.items.product-items { max-width: 960px;  right: 0; margin: 0 0 0 auto;}
+.catalog-category-view .toolbar { border: none;  background: #F4F4F4; padding: 10px 10px 6px; margin: 0 0 20px auto; max-width: 960px; right: 0;}
+.page-products .toolbar .limiter {  display: block;	float: right;}
+.products.wrapper~.toolbar .sorter {  display: block;}
+.products.wrapper~.toolbar .modes { display: block;}
+.products.wrapper~.toolbar .toolbar-amount { display: block;}
+.catalog-category-view .sorter {    float: left;}
+.page-products.page-layout-1column .products-grid .product-item {
+    width: 24.25%;
+    margin-right: 1%;
+    border: 1px solid #CDCDCD;
+    border-radius: 5px;
+    margin-bottom: 12px;
+    background: transparent !important;
+    text-align: center;
+}
+.page-products .products-grid .product-item:nth-child(4n + 4) {
+    margin-right: 0;
+}
+.products-grid .product-item-info:hover, .products-grid .product-item-info.active {     box-shadow: none; margin: 0;  padding: 0;  border: none;}
+.page-products.page-layout-1column .products-grid .product-item:hover {
+    border-color: #ff6500;
+}
+
+.catalog-category-view .product-item-name {
+    min-height: 90px;
+    max-height: 90px;
+    overflow: hidden;
+    text-decoration: none !important;
+    text-transform: uppercase;
+}
+.product-item-name a:hover {
+    text-decoration: none;
+}
+
+.products-list .product-item {
+    display: table;
+    width: 100%;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ededed;
+}
+.products-list .price-box.price-final_price {
+    text-align: right;
+    float: right;
+    margin-top: -21px;
+    margin-right: 10px;
+}
+.products-list .product.product-item-actions {
+    text-align: right;
+    float: right;
+    margin-top: -21px;
+    margin-right: 10px;
+    display: block;
+    width: 100%;
+}
+
+.catalog-category-view .products-list .product-item-name {
+    min-height: auto;    font-size: 18px;
+    text-transform: capitalize;
+}
+.products-list .price-box.price-final_price {
+    text-align: right;
+    float: right;
+    margin-top: -21px;
+    margin-right: 10px;
+    vertical-align: top;
+    font-family: "Open Sans",sans-serif;
+    color: #ff740d;
+}
+
+.products-list .product-item .tocart:hover{    background: rgb(89,89,89); border: 1px solid transparent; box-shadow: 0px 1px 1px 0px rgb(151,151,151) inset;}
+.products-list .product-item .tocart {
+    font-size: 1.3rem;    border-radius: 0;    line-height: 1;    padding-bottom: 10px;
+    padding-top: 10px;    white-space: nowrap;    border: 1px solid rgb(104,168,4)!important;
+    box-shadow: 0px 1px 1px 0px rgb(183,224,6) inset;    border-radius: 4px;
+    font-size: 17px;    font-weight: 600;    margin: 0px;    padding: 10px 35px;
+    background: -webkit-linear-gradient(rgb(128,194,7),rgb(119,188,5),rgb(100,174,3));
+    text-transform: uppercase;
+}
+.price-container .price {
+    font-size: 18px;
+	
+	 color: #ff740d;
+}
+
+
+
+
+@media screen and (max-width: 800px) {
+.products-list .price-box.price-final_price {  text-align: left;  float: none; margin-top: 0;}
+.products-list .product.product-item-actions { text-align: left; float: none; margin-top: 0;}
+}
+@media screen and (max-width: 767px) {
+.catalog-category-view .sorter { position: relative;}
+.modes {   display: block;}
+.catalog-category-view .products.wrapper.grid.products-grid .product-item-inner {    display: none;}	
+}
+
+@media screen and (max-width: 639px) {
+	.page-products.page-layout-1column .products-grid .product-item {
+    width: 47.50%;}
+}
+
+@media screen and (max-width: 350px) {
+	.page-products.page-layout-1column .products-grid .product-item {  width: 100%;}
+	.page-products .product-item-info { margin: 0 auto;}
+}
+
+
+.customnewproducts span.hidefortext {
+    float: right !important;
+    background: url(/pub/static/frontend/Energylights/Bulbs/en_GB/images/sprite.png) no-repeat;
+    background-position: -497px -165px;
+    width: 35px;
+    height: 33px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.customnewproducts button.action.tocart.primary {
+    background: transparent;
+    border: 0;
+}
+
+.customnewproducts .products-grid .product-item-actions {
+    margin: 0;
+    padding: 0 !important;
+}
+
+.customnewproducts .actions-primary {
+    text-align: right;
+}
+
+li.product-item {
+    position: relative;
+}
+li.product-item:hover .product-item-actions {
+    display: block !important;
+}
+.page-layout-1column .block.widget .products-grid .product-item:nth-child(3n+1), .page-layout-1column .block.widget .products-grid .product-item:nth-child(4n+1) {
+    margin-left: 0;
+}
+.customnewproducts .products-grid .product-item-actions {
+    margin: 0;
+    padding: 0 !important;
+    position: absolute;
+    width: 100%;
+    z-index: 99;
+    display: none;
+    top: 97%;
+    left: -1px;
+    background: #ff6500 !important;
+    border-bottom-left-radius: 4px !important;
+    border-bottom-right-radius: 4px !important;
+    box-shadow: none !important;
+    border: 1px solid #ff6500 !important;
+}
+.customnewproducts .actions-primary {
+    text-align: right;
+    display: block;
+}
+
+.product-reviews-summary .reviews-actions .action.add {
+    white-space: nowrap;
+    display: none;
+}
+
+
+@media screen and (max-width: 1024px) {
+	.page-layout-1column .block.widget .products-grid .product-item {
+		margin-left: 0%;
+		width: calc((100% - 4%)/4);
+	}
+}
+
+@media screen and (max-width: 991px) {
+	.page-layout-1column .block.widget .products-grid .product-item {
+		margin-left: 0%;
+		width: calc((100% - 4%)/3);
+	}
+}
+
+@media screen and (max-width: 767px) {
+	.page-layout-1column .block.widget .products-grid .product-item {
+		margin-left: 0%;
+		width: calc((100% - 4%)/2);
+	}
+}
+
+</style>

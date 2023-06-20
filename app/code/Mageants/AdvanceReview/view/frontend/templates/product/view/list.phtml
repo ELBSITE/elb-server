@@ -1,0 +1,487 @@
+<?php
+/**
+ * @category Mageants AdvanceReview
+ * @package Mageants_AdvanceReview
+ * @copyright Copyright (c) 2018 Mageants
+ * @author Mageants Team <support@mageants.com>
+ */
+$blockObj= $block->getLayout()->createBlock('Mageants\AdvanceReview\Block\Review');
+// $url  = $this->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]);
+$url  = $blockObj->getRefererUrl();
+$login_url = $block->getUrl('customer/account/login', array('referer' => base64_encode($url)));
+
+$create_accout_url =  $block->getUrl('customer/account/create/');
+
+if($blockObj->isEnableAdvanceReview())
+{
+
+    $productId= $this->getProduct()->getId();
+    $rating=$blockObj->getAllStar();
+    $star=5;
+    $inputval=1;
+    $countReview=$blockObj->getReviewCount();
+    $avgstar=$blockObj->getAvgStar();
+    $width=$blockObj->getRatingbarWidth();
+    $avgWidth=$blockObj->getAvgWidth();
+
+?>
+<style>
+    .review-filter .review-filter-content select {
+    width: 30%;
+}
+</style>
+<div class="rating">
+    <div class="rating-title">
+        <strong>Customer Rating</strong>
+    </div>
+    <div class="ratingcon">
+        <div class="review-ratings" width="100%">
+            <div class="rating-summary item" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+                <div class="rating-result" title="<?php echo $avgWidth; ?>%" style="float: left;">
+                    <meta itemprop="worstRating" content = "1"/>
+                    <meta itemprop="bestRating" content = "100"/>
+                    <span style="width:<?php echo $avgWidth; ?>%">
+                        <span itemprop="ratingValue"><?php echo $avgWidth; ?>%</span>
+                    </span>
+                </div>    
+                <div class="ttlreview"><span><?php echo $countReview; ?></span></div>
+            </div>
+        </div>
+        <div class="avgrating"><span><?php echo $avgstar." Out of 5 stars"; ?></span></div>
+        <?php if($blockObj->getOnlyPurchaser()) : ?>
+        
+        <div class="review-button">
+            <div class="actions-toolbar review-form-actions">
+                <div class="primary actions-primary">
+                    <button type="submit" id="gotoreviewform" class="action submit primary write-action"><span>Write Review</span></button>
+                </div>
+            </div>
+        </div>
+
+        <?php endif; ?>
+    </div>
+    <div class="star">
+        <ul>
+    <?php 
+        foreach ($rating as $ratings)
+        {
+    ?>
+            <li>
+            <a id="starclk" style="text-decoration: none;">
+                <input type="hidden" id="star" value='<?php echo $inputval; ?>'>
+            <div class="starcon" style="width:10%; float: left;"><?php echo $star."&nbsp;★"; ?></div>
+            <div class="ratingbarcon" style="width:75%; float: left;">
+                <div class="ratingbar <?php if($star<=2){ echo "_".$star."starbar"; }?>">
+                  <span style="width: <?php echo $width[$star]."%"; ?>"></span>
+                </div>
+            </div>
+            <div class="trating" style="width:10%; float: left;">
+                <?php echo $width[$star]."%"; ?>
+            </div>
+            </a>
+            </li>
+    <?php
+            $star--;
+            $inputval++;
+        }
+    ?>
+        </ul>
+    </div> 
+</div>
+
+    <?php
+    
+        $_items = $block->getReviewsCollection()->setPageSize(10)->getItems();
+        $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
+    ?>
+        <?php if (count($_items)):?>
+        <div class="block review-list  001" id="customer-reviews">
+        <div class="block-title">
+            <strong><?php echo __('Customer Reviews') ?></strong>
+        </div>
+            <div class="block-content">
+                <div class="toolbar review-toolbar">
+                     <?php echo $block->getChildHtml('toolbar') ?>
+                </div>
+                <div class="review-sort-filter">
+                    <div class="review-sort">
+                        <div class="review-sort-title"><strong>SORT BY</strong></div>
+                        <div class="review-sort-content">
+                            <select id="review_sort">
+                                <option value="toprated">Top rated</option>
+                                <option value="mostrecent">Most recent</option>
+                                
+                            </select>
+                        </div>
+                    </div>
+                    <div class="review-filter">
+                        <div class="review-filter-title"><strong>FILTER BY</strong></div>
+                        <div class="review-filter-content">
+                            <select id="purchasefltr">
+                                <option value="">All reviewers</option>
+                                <!--option value="1">Verified Purchase only</option-->
+                            </select>
+                            <select id="starfltr">
+                                <option value="">All star</option>
+                                <option value="5">5 star</option>
+                                <option value="4">4 star</option>
+                                <option value="3">3 star</option>
+                                <option value="2">2 star</option>
+                                <option value="1">1 star</option>
+                            </select>
+                            <select id="imgfltr">
+                                <option value="">All text, image and video reviews</option>
+                                <option value="imgonly">Images and video review only</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <ol class="items review-items">
+                <?php foreach ($_items as $_review):?>
+                    
+                    <li class="item review-item" itemscope itemprop="review" itemtype="http://schema.org/Review">
+                        <?php if (count($_review->getRatingVotes())): ?>
+                            <div class="review-ratings">
+                            <?php foreach ($_review->getRatingVotes() as $_vote): ?>
+                            <div class="rating-summary item" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+                                <div class="rating-result" title="<?php echo $_vote->getPercent() ?>%">
+                                    <meta itemprop="worstRating" content = "1"/>
+                                    <meta itemprop="bestRating" content = "100"/>
+                                    <span style="width:<?php echo $_vote->getPercent() ?>%">
+                                        <span itemprop="ratingValue"><?php echo $_vote->getPercent() ?>%</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                            </div>
+                            <div class="review-title" style="display: inline-block;" itemprop="name"><?php echo $block->escapeHtml($_review->getTitle()) ?></div>
+                            <div>
+                                <?php if($_review->getVerifiedPurchase()): ?>
+                                    <span style="color: #c45500;" >Verified Purchase</span>
+                                <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
+                        <div class="review-details" style="margin-left: 0;">
+                            <p class="review-author">
+                                <span class="review-details-label"><?php echo __('Review by')?></span>
+                                <strong class="review-details-value" itemprop="author"><?php echo $block->escapeHtml($_review->getNickname()) ?></strong>
+                            </p>
+                            <p class="review-date">
+                                <span class="review-details-label" style="position: relative;"><?php  echo __('On') ?></span>
+                                <time class="review-details-value" itemprop="datePublished" datetime="<?php echo $block->formatDate($_review->getCreatedAt(), $format) ?>"><?php echo $block->formatDate($_review->getCreatedAt(), $format) ?></time>
+                            </p>
+                        </div>
+                        <div class="review-content" itemprop="description" style="margin-left: 0;display: inline-block;">
+                            <?php echo nl2br($block->escapeHtml($_review->getDetail())) ?>
+                        </div>
+                        <div class="review-image-video" >
+                            <?php if(!empty($_review->getImageVideo())) : ?> 
+                                <?php
+                                    $filenm = array();
+                                    $filenm = explode(", ", $_review->getImageVideo());
+                                    $slideCount = 0;
+                                ?>
+                                <?php foreach ($filenm as $imgnm) : ?>
+                                    <?php
+                                        $video=['mp4', '3gp', 'avi', 'webm'];
+                                        $extenstion = substr($blockObj->geMediaUrl($imgnm), strrpos($blockObj->geMediaUrl($imgnm), ".") + 1);
+                                        if(in_array($extenstion, $video)){
+                                    ?>
+                                    <a href="#reviewModal<?php echo $_review->getReviewId(); ?>" rel="modal:open">
+                                    <video width="250" height="250" class="image-video-popup" id="<?php echo $slideCount; ?>" controls>
+                                      <source src="<?php echo $blockObj->geMediaUrl($imgnm); ?>" type="video/mp4">
+                                      Your browser does not support the video tag.
+                                    </video>
+                                    </a>
+                                    <?php
+                                    }
+                                    else{ ?>
+                                    <a href="#reviewModal<?php echo $_review->getReviewId(); ?>" rel="modal:open">
+                                        <img src="<?php echo $blockObj->geMediaUrl($imgnm); ?>" class="image-video-popup" id="<?php echo $slideCount; ?>" height="150px" width="150px" style="margin-right: 12px;" >
+                                    </a>
+                                    <?php } ?>
+                                <?php
+                                	$slideCount++;
+                                ?>
+                                <?php endforeach; ?>
+
+                                <div id="reviewModal<?php echo $_review->getReviewId(); ?>" class="modal">
+                                    <div class="popup-content">
+                                        <div class="popupslider">
+                                            <div class="owl-carousel owl-theme">
+                                                <?php foreach ($filenm as $imgnm) : ?>
+                                                    <?php
+                                                        $video=['mp4', '3gp', 'avi', 'webm'];
+                                                        $extenstion = substr($blockObj->geMediaUrl($imgnm), strrpos($blockObj->geMediaUrl($imgnm), ".") + 1);
+                                                        if(in_array($extenstion, $video)){
+                                                    ?>
+                                                    <div class="item">
+                                                        <video width="320" height="240" controls>
+                                                            <source src="<?php echo $blockObj->geMediaUrl($imgnm); ?>" type="video/mp4">
+                                                            Your browser does not support the video tag.
+                                                        </video>
+                                                    </div>
+                                                    <?php
+                                                    }
+                                                    else{ ?>
+                                                    <div class="item">    
+                                                        <img src="<?php echo $blockObj->geMediaUrl($imgnm); ?>" alt="...">
+                                                    </div>
+                                                    <?php } ?>
+                                                <?php endforeach; ?>
+                                            </div>
+                                        </div>
+                                        <div class="popup-details">
+                                            <?php if (count($_review->getRatingVotes())): ?>
+                                                <div class="review-ratings">
+                                                <?php foreach ($_review->getRatingVotes() as $_vote): ?>
+                                                <div class="rating-summary item" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+                                                    <div class="rating-result" title="<?php echo $_vote->getPercent() ?>%">
+                                                        <meta itemprop="worstRating" content = "1"/>
+                                                        <meta itemprop="bestRating" content = "100"/>
+                                                        <span style="width:<?php echo $_vote->getPercent() ?>%">
+                                                            <span itemprop="ratingValue"><?php echo $_vote->getPercent() ?>%</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <?php endforeach; ?>
+                                                </div>
+                                                <div class="review-title" style="display: inline-block;" itemprop="name"><?php echo $block->escapeHtml($_review->getTitle()) ?></div>
+                                                <div>
+                                                    <?php if($_review->getVerifiedPurchase()): ?>
+                                                        <span style="color: #c45500;" >Verified Purchase</span>
+                                                    <?php endif; ?>
+                                                </div>
+                                            <?php endif; ?>
+                                                <div class="review-details" style="margin-left: 0;">
+                                                    <p class="review-author">
+                                                        <span class="review-details-label"><?php echo __('Review by')?></span>
+                                                        <strong class="review-details-value" itemprop="author"><?php echo $block->escapeHtml($_review->getNickname()) ?></strong>
+                                                    </p>
+                                                    <p class="review-date">
+                                                        <span class="review-details-label" style="position: relative;"><?php echo __('On') ?></span>
+                                                        <time class="review-details-value" itemprop="datePublished" datetime="<?php echo $block->formatDate($_review->getCreatedAt(), $format) ?>"><?php echo $block->formatDate($_review->getCreatedAt(), $format) ?></time>
+                                                    </p>
+                                                </div>
+                                                <div class="review-content" itemprop="description" style="margin-left: 0;display: inline-block;">
+                                                    <?php echo nl2br($block->escapeHtml($_review->getDetail())) ?>
+                                                </div>
+                                                <div class="btn-help-nothelp">
+                                                    <input type="hidden" id="reviewid" value="<?php echo $_review->getReviewId(); ?>">
+                                                    <div class="btn-help">
+                                                        <span><i class="fa fa-thumbs-o-up" aria-hidden="true"></i></span>
+                                                        <span id="likevotes<?php echo $_review->getReviewId(); ?>"><?php echo $blockObj->getLikeCount($_review->getReviewId()); ?></span>
+                                                    </div>
+                                                    <div class="btn-nothelp">
+                                                        <span><i class="fa fa-thumbs-o-down" aria-hidden="true"></i></span>
+                                                        <span id="dislikevotes<?php echo $_review->getReviewId(); ?>"><?php echo $blockObj->getDislikeCount($_review->getReviewId()); ?></span>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        <div class="btn-help-nothelp">
+                            <input type="hidden" id="reviewid" value="<?php echo $_review->getReviewId(); ?>">
+                            <div class="btn-help">
+                                <span><i class="fa fa-thumbs-o-up" aria-hidden="true"></i></span>
+                                <span id="likevotes<?php echo $_review->getReviewId(); ?>"><?php echo $blockObj->getLikeCount($_review->getReviewId()); ?></span>
+                            </div>
+                            <div class="btn-nothelp">
+                                <span><i class="fa fa-thumbs-o-down" aria-hidden="true"></i></span>
+                                <span id="dislikevotes<?php echo $_review->getReviewId(); ?>"><?php echo $blockObj->getDislikeCount($_review->getReviewId()); ?></span>
+                            </div>
+                        </div>
+                    </li>
+                <?php endforeach; ?>
+                </ol>
+                
+                <div class="toolbar review-toolbar">
+                    <?= $block->getChildHtml('toolbar') ?>
+                </div>
+                <div id="popup-mpdal" style="display: none;" >
+                    <div class="message info notlogged" id="review-form">
+                        <div>
+                            <?php echo __('Only registered users can Like or Dislike reviews. Please <a href="%1" >Sign in</a> or <a href="%2" target="_blank">create an account</a>', $login_url, $create_accout_url) ?>
+                        </div>
+                    </div>
+                </div>
+                <script type="text/javascript">
+                    require(['jquery', 'jquerymodal'], function($){
+                        $(document).ready(function() {
+                            $('.owl-carousel').owlCarousel({
+                                items: 1,
+                                loop: true,
+                                margin: 10,
+                                autoplay: false,
+                                autoplayTimeout: 5000,
+                                autoplayHoverPause: true,
+                                autoHeight:true,
+                                nav:false,
+                                navText : ["<i class='fa fa-chevron-left'></i>","<i class='fa fa-chevron-right'></i>"]
+                            });
+                            jQuery('.image-video-popup').click(function(){
+							jQuery('.owl-carousel').trigger('to.owl.carousel',[jQuery(this).attr('id')]);
+						});
+                            
+                              
+                        });
+                    });
+                </script>
+                <script type="text/javascript">
+                    require(['jquery', 'Magento_Ui/js/modal/modal'], function($, modal){
+                        
+                        var options = {
+                            type: 'popup',
+                            responsive: true,
+                            innerScroll: true,
+                            buttons: [{
+                                text: $.mage.__('Continue'),
+                                class: '',
+                                click: function () {
+                                    this.closeModal();
+                                }
+                            }]
+                        };
+
+                        var popup = modal(options, $('#popup-mpdal'));
+                        
+                        $('body').on('click', 'div.btn-help',function(){
+                            var customerId=<?php echo ($blockObj->getCheckLogin() ? $blockObj->getCheckLogin() : 0 ) ?>;
+                            if(customerId){
+                                var like="1";
+
+                                var reviewid = $(this).closest("div.btn-help-nothelp").find("input[id='reviewid']").val();
+                                likeDislikeAjax(customerId, like, reviewid);
+                            }
+                            else{
+                                $("#popup-mpdal").modal("openModal");
+                            }
+                        });
+
+                        $('body').on('click', 'div.btn-nothelp',function(){
+                            var customerId=<?php echo ($blockObj->getCheckLogin() ? $blockObj->getCheckLogin() : 0 ) ?>;
+                            if(customerId){
+                                var like="0";
+
+                                var reviewid = $(this).closest("div.btn-help-nothelp").find("input[id='reviewid']").val();
+                                likeDislikeAjax(customerId, like, reviewid);
+                            }
+                            else{
+                                $("#popup-mpdal").modal("openModal");
+                            }
+                        });
+
+                        function likeDislikeAjax(customerId, like, reviewid){
+                            var customurl = "<?php echo $this->getUrl('advancereview/product/likedislike'); ?>";
+                            $.ajax({
+                                url:customurl,
+                                data:{
+                                    reviewid:reviewid,
+                                    customerId:customerId,
+                                    like:like
+                                },
+                                type: 'POST',
+                                success: function(result){
+                                    $('span#likevotes'+reviewid).html(result['like']);
+                                    $('span#dislikevotes'+reviewid).html(result['dislike']);
+                                }
+                            });
+                        }
+
+                        $(document).ready(function(){
+
+                            $("#gotoreviewform").click(function(){
+                                $('html, body').animate({
+                                    scrollTop: $("#review-form").offset().top
+                                }, 1000);
+                            });
+
+                            $('a#starclk').on('click',function(){
+                                var inputval = $(this).children('input#star').val();
+                                $('select#starfltr>option:eq('+inputval+')').prop('selected', true);
+                                filter('<?php echo $this->getUrl('advancereview/product/filterreview'); ?>');
+                            });
+
+                            
+                            $('#review_sort, #purchasefltr, #starfltr, #imgfltr').on('change',function(){
+                                filter('<?php echo $this->getUrl('advancereview/product/filterreview'); ?>');
+                            });
+
+                            $('body').on('click', '.review-items .review-toolbar a.page',function(){
+                                var url=$(this).attr('href');
+                                        $(this).attr("href", "javascript:void(0);");
+                                filter(url);
+                            });
+
+                            function filter(url){
+                                var sortreview = $('select#review_sort option:checked').val();
+                                var verified = $('select#purchasefltr option:checked').val();
+                                var star = $('select#starfltr option:checked').val();
+                                var img = $('select#imgfltr option:checked').val();
+                                var pid = "<?php echo $productId; ?>"; 
+                                var filterurl = url;
+                                
+                                $.ajax({
+                                    url:filterurl,
+                                    data:{
+                                        pid:'<?php echo $productId; ?>',
+                                        verified:verified,
+                                        star:star,
+                                        img:img,
+                                        sortreview:sortreview
+                                    },
+                                    type: 'POST',
+                                    success: function(result){
+                                        $(".items.review-items").html(result);
+                                        $("ol.items.review-items+.toolbar").css("display", "none");
+                                        $('.owl-carousel').owlCarousel({
+                                            items: 1,
+                                            loop: true,
+                                            margin: 10,
+                                            autoplay: false,
+                                            autoplayTimeout: 5000,
+                                            autoplayHoverPause: true,
+                                            autoHeight:true,
+                                            nav:false,
+                                            navText : ["<i class='fa fa-chevron-left'></i>","<i class='fa fa-chevron-right'></i>"]
+                                        });
+
+                                    }
+                                });
+                            }
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+        <?php endif;?>   
+    <?php 
+}
+?>
+
+<a href="" target="_blank"></a>
+
+<script>
+require([
+    'jquery',
+    'domReady!'// wait for dom ready
+], function ($) {
+        $( document ).ready(function() {
+            
+                    $( document ).ready(function() {
+                            jQuery(document).on("click","a#tab-label-reviews-title",function() {
+                                jQuery(this).parent().toggleClass("newshow1");
+                                jQuery("div#reviews").toggleClass("newshow");
+                          });
+        });
+        
+      //  jQuery('div#tab-label-reviews').click();
+            setTimeout(function(){
+            	  jQuery('select#review_sort').val('mostrecent').trigger('change')
+            }, 1000); 
+        
+        });
+});
+</script>

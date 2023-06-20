@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../vendor/magento/framework/Module/etc/module.xsd">
+  <head>
+    <remove src="css/print.css"/>
+	<css src="css/custom.css" />
+	<css src="css/style.css" />
+   </head>
+</page>

@@ -1,0 +1,125 @@
+<?php
+   $reviewcollection = $this->getMediaCollection();
+   
+   ?>
+<div id="#popup-modal" class="modal" >
+   <a href="#close-modal" rel="modal:close" class="close-modal ">Close</a>
+   <div class="popupslider">
+      <div class="owl-carousel owl-theme">
+         <?php 
+            $multiimage=explode(',',$reviewcollection['image_video']);
+            foreach ($multiimage as $key => $singleimage){ 
+            $reviewimage = $this->getReviewMediaUrl().$singleimage;
+            $originalimage = str_replace(' ', '', $reviewimage);
+            $imagetype = explode(".", $originalimage);
+            $types = ['jpg', 'jpeg', 'gif', 'png'];
+            $ext = strtolower(pathinfo($originalimage, PATHINFO_EXTENSION));
+            if(in_array($ext,$types)){?>
+         <div class="item" >    
+            <img id="review-image-lg" src="<?php echo $originalimage;?>"alt="Image" id="imag1"/>
+         </div>
+         <?php }else{?>
+         <div class="item">
+            <video  controls>
+               <source id="review-image-lg" src="<?php echo $originalimage;?>" type="video/mp4" autoplay="autoplay">
+               Your browser does not support the video tag.
+            </video>
+         </div>
+         <?php }?>
+         <?php }?>
+      </div>
+   </div>
+</div>
+<?php if(!empty($reviewcollection['image_video'])):?>
+<div class="review-attachments" style="float: left;">
+   <div class="review-media-value" style="float: left;">
+      <?php 
+         $multiimage=explode(',',$reviewcollection['image_video']);
+         //var_dump($multiimage);exit;
+         $slideCount = 0;
+         foreach ($multiimage as $key => $singleimage){ 
+         $reviewimage = $this->getReviewMediaUrl().$singleimage;
+         $originalimage = str_replace(' ', '', $reviewimage);
+         $imagetype = explode(".", $originalimage);
+         $types = ['jpg', 'jpeg', 'gif', 'png'];
+         //var_dump($types);exit;
+         if(in_array($imagetype[4],$types)){?>
+      <div class="image item base-image" data-role="image">
+         <div class="product-image-wrapper">
+            <div class="reviewimagevideo">
+               <img class="product-image" data-role="image-element" src="<?php echo $originalimage;?>" class="image-video-popup" id="<?php echo $slideCount; ?>" alt="Image" id="imag1"/>
+            </div>
+            <div class="actions">
+               <button type="button" class="action-remove" value="<?php echo $originalimage; ?>"  data-role="delete-button" title="Delete image" id="button" >
+               <span>Delete image</span>
+               </button>
+            </div>
+         </div>
+      </div>
+      <?php }else{?>
+      <div class="image item base-image" data-role="image">
+         <div class="product-image-wrapper video-item">
+            <div class="reviewimagevideo">
+               <video  width="170" height="170" >
+                  <source class="product-image" data-role="image-element" src="<?php echo $originalimage;?>"  type="video/mp4" autoplay="autoplay"class="image-video-popup" id="<?php echo $slideCount; ?>" >
+               </video>
+            </div>
+            <div class="actions">
+               <button type="button" class="action-remove" value="<?php echo $originalimage; ?>"  data-role="delete-button" title="Delete video" id="button" >
+               <span>Delete video</span>
+               </button>
+            </div>
+         </div>
+      </div>
+      <?php }?>
+   </div>
+   <?php $slideCount++;?>
+   <?php } ?>
+</div>
+</div>
+<?php else: ?>
+<?= $block->escapeHtml(__("No attachment found")) ?>
+<?php endif; ?>
+<script type="text/javascript">
+   require(['jquery', 'jquerymodal'], function($){
+     $('.action-remove').on('click', function (e) {
+         var fullPath = e.target.getAttribute('value');
+         var filename = fullPath.replace(/^.*[\\\/]/, '');
+         $('#deleted_media').val($('#deleted_media').val()  + filename + ",");
+         $(e.target).parent().parent().parent().remove();
+     });
+       $(document).ready(function() {
+           $('.owl-carousel').owlCarousel({
+               items: 1,
+               loop: true,
+               margin: 10,
+               autoplay: false,
+               autoplayTimeout: 5000,
+               autoplayHoverPause: true,
+               autoHeight:true,
+               nav:false,
+               navtext: ["<i class='fa fa-long-arrow-left'></i>",
+                         "<i class='fa fa-long-arrow-right'></i>"]
+   
+           });
+   
+           $(".reviewimagevideo").click(function(){
+            var slideid = $(this).find('img').attr('id');
+            if(slideid){
+            $('.owl-carousel').trigger('to.owl.carousel', slideid);
+            $(".modal").css("display","inline-block");
+            }else{
+            var slideid = $(this).find('source').attr('id');
+            $('.owl-carousel').trigger('to.owl.carousel', slideid);
+            $(".modal").css("display","inline-block");
+            }
+   
+         });
+         $(".close-modal").click(function(){
+           $(".modal").css("display","none"); //je class ne display block karvano hoy e
+         });
+   
+           
+       });
+   });
+</script>

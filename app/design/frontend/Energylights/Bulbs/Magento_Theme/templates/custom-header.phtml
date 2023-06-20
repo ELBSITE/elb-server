@@ -1,0 +1,47 @@
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$customerSession = $objectManager->create('Magento\Customer\Model\Session');
+?>
+<div class="account-wrapper-main">
+                <?php 
+				$baseurl=$block->getUrl();
+				?>
+                <a href="<?php echo $baseurl .'customer/account/'; ?>" data-target-element="#header-account" class="skip-link skip-account">
+                    <span class="icon"></span>
+                    <span class="label">My Account</span>
+                </a>
+</div>
+<div id="header-account" class="skip-content skip-active">
+       <div class="links">
+             <ul>
+					<li class="first"><a href="<?php echo $baseurl .'customer/account/'; ?>" title="My Account">My Account</a></li>
+					<li><a href="<?php echo $baseurl .'checkout/cart/'; ?>" title="My Cart" class="top-link-cart">My Basket</a></li>
+					<li><a href="<?php echo $baseurl .'checkout/'; ?>" title="Checkout" class="top-link-checkout">Checkout</a></li>
+					<li><a href="<?php echo $baseurl .'customer/account/create/'; ?>" title="Register">Register</a></li>
+					
+
+						<?php if($customerSession->isLoggedIn()) {
+                         $customername = $customerSession->getCustomer()->getName();
+                         
+						?>
+						<li class="header_account_link_list">
+						<a class=" last" href="<?php echo $this->getUrl("customer/account/logout");?>"><?php echo __('Log out')?></a>
+						</li>
+
+						<?php } else { ?>
+						<li class=" last"><a href="<?php echo $baseurl .'/customer/account/login/referer/aHR0cHM6Ly9tMi5idWxrbmF0dXJhbG9pbHMuY29tL2N1c3RvbWVyL2FjY291bnQvaW5kZXgv/';?>" title="Log In">Log In</a></li>
+						<?php } ?>
+              </ul>
+        </div>
+</div>
+<script type="text/javascript">
+    require([
+        "jquery"
+    ], function ($) {
+	jQuery('.skip-account').on("click", function (e) {
+		  e.preventDefault();
+		  jQuery('#header-account').toggle();
+    });	
+    });
+		
+</script>

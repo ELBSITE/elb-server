@@ -1,0 +1,60 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var $block \Magento\Sales\Block\Order\Totals
+ * @see \Magento\Sales\Block\Order\Totals
+ */
+ $td = 1;
+?>
+<tr>
+    <td style=" background-color: #fff;">&nbsp;<br/><br/></td>
+</tr>
+<?php foreach ($block->getTotals() as $_code => $_total) : ?>
+ <?php   if ($_total->getLabel() == "Grand Total (Excl.Tax)") {  
+                   continue; 
+         } ?> 
+    <?php if ($_total->getBlockName()) : ?>
+        <?= $block->getChildHtml($_total->getBlockName(), false) ?>
+    <?php else :?>
+    <tr class="<?= $block->escapeHtmlAttr($_code) ?>">
+       <?php if ($td == 1) : ?>
+            <td style=" background-color: #fff;text-align:left;vertical-align:bottom; padding-left:10px; " rowspan="5" ><br/><br/>
+                <span class="Damged-msg"> Damaged good must be reported within 5 days of delivery <br/><br/>
+                 <b>Thank you for your order please call again</b></span><br/><br/>
+            </td>
+          <?php  $td++; ?>
+       <?php else : ?>
+            
+      <?php  endif ?>
+       <?php  if ($_total->getLabel() == "Grand Total (Incl.Tax)") { ?>
+                 <th  <?= /* @noEscape */ $block->getLabelProperties() ?> scope="row" style="  background-color: #fff;text-align:right; padding-top:10px; padding-right:20px">
+                  <?php echo "Total Test";?>
+                  </th>
+                  
+         <?php }else{ ?> 
+         
+        <th  <?= /* @noEscape */ $block->getLabelProperties() ?> scope="row" style=" background-color: #fff; text-align:right; padding-top:10px; padding-right:20px">
+            <?php if ($_total->getStrong()) : ?>
+           
+                <strong><?= $block->escapeHtml($_total->getLabel()) ?></strong>
+            <?php else : ?>
+                <?= $block->escapeHtml($_total->getLabel()) ?>
+            <?php endif ?>
+        </th>
+        
+        <?php } ?>
+        
+        <td <?= /* @noEscape */ $block->getValueProperties() ?> data-th="<?= $block->escapeHtmlAttr($_total->getLabel()) ?>" style=" background-color: #fff; text-align:right; padding-top:10px; padding-right: 10px;">
+            <?php if ($_total->getStrong()) : ?>
+                <strong><?= /* @noEscape */ $block->formatValue($_total) ?></strong>
+            <?php else : ?>
+                <?= /* @noEscape */ $block->formatValue($_total) ?>
+            <?php endif?>
+        </td>
+    </tr>
+    <?php endif; ?>
+<?php endforeach?>

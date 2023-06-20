@@ -1,0 +1,36 @@
+version: '3.8'
+
+services: 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ../..:/workspaces:cached
+      - ./config/php.ini:/usr/local/etc/php/conf.d/custom.ini
+    command: sleep infinity
+    network_mode: service:db
+    environment:
+      XDEBUG_MODE: off
+  db:
+    image: mariadb:10.4
+    restart: unless-stopped
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: elb_magento
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: mysql
+  phpadmin:
+    image: phpmyadmin/phpmyadmin:5
+    restart: unless-stopped
+    environment:
+      PMA_ARBITRARY: 1
+      UPLOAD_LIMIT: 4000M
+      MAX_EXECUTION_TIME: 216000
+      MEMORY_LIMIT: 4000M
+    ports:
+      - "8090:80"
+volumes:
+  mariadb-data:

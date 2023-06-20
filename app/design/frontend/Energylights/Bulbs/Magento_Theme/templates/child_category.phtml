@@ -1,0 +1,256 @@
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$category = $objectManager->get('Magento\Framework\Registry')->registry('current_category');//get current category
+$catId =  $category->getId();
+
+
+    $subCategory = $objectManager->create('Magento\Catalog\Model\Category')->load($catId);
+    $subCats = $subCategory->getChildrenCategories();
+    $_helper = $this->helper('Magento\Catalog\Helper\Output');
+
+    $mediaUrl = $objectManager->get('Magento\Store\Model\StoreManagerInterface')
+                    ->getStore()
+                    ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
+
+?>
+
+
+
+<div class="category_section">
+<!-- h1  class="category_pagetitle category_pagetitle_mobile" style="display:none;"><?php  echo $category->getName(); ?></h3 -->
+<div class="sidebar_section">
+<h3>CATEGORIES</h3>
+<ul class="subcatul_sidebar ">
+    <?php
+    foreach ($subCats as $subcat) {
+        $_category = $objectManager->create('Magento\Catalog\Model\Category')->load($subcat->getId());
+        $subcaturl = $subcat->getUrl();
+?>
+        <li class="cat-side-li">
+			<div class="listdown">
+                 <a class="link catname" href="<?php echo $subcaturl ?>"><?php echo $subcat->getName(); ?></a>
+            </div>
+        </li>
+    <?php } ?>
+</ul>
+</div>
+
+
+
+<div class="category_content_section">
+<h1  class="category_pagetitle category_pagetitle_desktop"><?php  echo $category->getName(); ?></h3>
+<ul class="sub-cat-ul ">
+    <?php
+    foreach ($subCats as $subcat) {
+        $_category = $objectManager->create('Magento\Catalog\Model\Category')->load($subcat->getId());
+        $subcaturl = $subcat->getUrl();
+
+
+        $_imgUrl = '';
+		if(isset($_category->getData()["thumbnail"])){
+		    
+        
+        if(strpos($_category->getData()["thumbnail"], '/pub/media/catalog/tmp/category/') !== false) {
+         $image_url = $_category->getData()["thumbnail"];
+         $_imgUrl = $image_url;
+        }else {
+         $image_url = str_replace('/pub/media/catalog/category/', '', $_category->getData()["thumbnail"]);
+         $_imgUrl = '/pub/media/catalog/category/'.$image_url;
+        }
+
+           
+			
+		}
+        if($_imgUrl){
+          $_imgUrl;
+            $_imgUrl = $mediaUrl .str_replace('/pub/media/catalog/category//media/', '',  $_imgUrl);
+        }else{
+			$_imgUrl = '/pub/media/small_image.jpg';
+		}
+
+		?>
+        <li class="cat-li cat-li-2">
+				<a class="link catname" href="<?php echo $subcaturl ?>">
+				
+				<div class="top_cat" style="background: url('<?php echo $_imgUrl; ?>');" ></div>
+				<div class="bottom_cat">
+				<?php echo $subcat->getName(); ?>
+				</div>
+				
+				</a>
+        </li>
+    <?php } ?>
+</ul>
+
+</div>
+
+</div>
+<style>
+
+.breadcrumbs a:visited {
+    color: #333;
+    text-decoration: none;
+}
+.block.filter {
+    display: none;
+}
+.category-image {  display: none !important;}
+.info.info_catname_withbg {
+	background: #888;
+	min-height: 250px;
+	position: relative;
+	background-position: center;
+    background-size: cover;
+}
+
+ul.subcatul_sidebar li a {
+    font-size: 12px;
+    color: #272727;
+    line-height: 18px;
+    display: block;
+    text-transform: capitalize;
+    padding: 4px 10px;
+}
+ul.subcatul_sidebar li {
+    padding: 0;
+    margin: 0;
+}
+ul.subcatul_sidebar {
+    margin: 10px 0;
+}
+
+.top_cat {
+    height: 180px;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    margin: 15px !important;
+    background-size: contain !important;
+}
+.sidebar_section h3 {
+    border-bottom: 2px solid #00B4D3;
+    position: relative;
+    color: #373737;
+    font-size: 17px;
+    font-weight: 400;
+    text-transform: uppercase;
+    padding: 9px 10px;
+    margin: 0;
+    font-family: 'Century Gothic';
+}
+
+.sidebar_section {
+    width: 18%;
+    float: left;margin-right: 1%;
+	    border: 1px solid #E9E9E9;
+    border-radius: 5px;
+    transition: all 0.3s linear;
+}
+.category_content_section {
+    width: 80%;
+    float: left;
+}
+.category_section {
+    display: inline-block;
+    width: 100%;
+}
+.sidebar_section ul {
+    padding: 0;
+}
+.sidebar_section li {
+    list-style-type: none;
+}
+
+ul.sub-cat-ul {
+    list-style-type: none;
+	    padding: 0;
+}
+.bottom_cat {
+    font-size: 15px;
+    text-transform: capitalize;
+    color: #272727;
+    line-height: 18px;
+    display: block;
+    min-height: 64px;
+    padding: 0px 10px 10px;
+    text-decoration: none !important;
+}
+li.cat-li.cat-li-2 {
+    width: 18.5%;
+    float: left;
+    text-align: center;
+    border: 1px solid #E9E9E9;
+    border-radius: 5px;
+    transition: all 0.3s linear;
+    margin: 0px 1% 10px 0px;
+}
+a.link.catname:hover {
+    text-decoration: none;
+}
+
+li.cat-li.cat-li-2:hover {
+    box-shadow: 0px 0px 4px 2px #EAEAEA;
+	 text-decoration: none !important;
+}
+.bottom_cat:hover {
+    color: #ff740d;
+    text-decoration: none !important;
+}
+h1.category_pagetitle {
+    color: #373737;
+    font-size: 22px;
+    word-wrap: break-word;
+    margin: 17px 0px 15px;
+    font-family: 'Century Gothic';
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+
+@media only screen and (max-width: 991px) {
+ 
+li.cat-li.cat-li-2 {    width: 23.5%;}
+
+}
+
+@media only screen and (max-width: 767px) {
+h1.category_pagetitle.category_pagetitle_desktop {  display: none;}
+.sidebar_section { width: 100%; margin-right: 0; }
+h1.category_pagetitle.category_pagetitle_mobile {  display: block !important;}
+.category_content_section {  width: 100%;  float: left;    margin-top: 10px;}
+li.cat-li.cat-li-2 {
+    width: 23.6%;
+}
+
+}
+
+@media only screen and (max-width: 550px) {
+	li.cat-li.cat-li-2 {   width: 48%;}
+}
+</style>
+
+
+<script>
+	require(["jquery"], function($){
+
+
+			$(window).on("resize", function (e) {
+				checkScreenSize();
+			});
+			checkScreenSize();
+
+
+			function checkScreenSize(){
+				var newWindowWidth = $(window).width();
+				if (newWindowWidth <= 767) {
+				console.log(newWindowWidth);
+				
+ 				$('ul.subcatul_sidebar').hide();
+				$(".sidebar_section h3 ").click(function(){
+				$("ul.subcatul_sidebar").slideToggle(); }); 
+				} else {
+
+				}
+
+			}
+	});
+</script>
