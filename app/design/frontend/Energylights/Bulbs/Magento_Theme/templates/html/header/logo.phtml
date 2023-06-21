@@ -53,7 +53,7 @@ if ($request->getFullActionName() == 'cms_index_index') {
     require([
         "jquery"
     ], function ($) {
-	jQuery(window).load(function() {
+	jQuery(window).on('load', function() {
 		  jQuery(".footer-center-container").insertAfter("footer.page-footer");
 		  jQuery("ul.compare.wrapper").insertBefore(".block.block-search");
 		  jQuery(".dz_share").insertAfter("div#tab-label-description");
@@ -68,7 +68,7 @@ if ($request->getFullActionName() == 'cms_index_index') {
     require([
         "jquery"
     ], function ($) {
-		jQuery(window).load(function() {
+		jQuery(window).on('load', function() {
 			jQuery(".btn1").on("click",function(){
 			jQuery(".btn1").addClass("dz_active");
 			jQuery(".btn2").removeClass("dz_active");

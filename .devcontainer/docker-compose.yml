@@ -6,12 +6,13 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ../..:/workspaces:cached
+      - ..:/var/www/html:cached
       - ./config/php.ini:/usr/local/etc/php/conf.d/custom.ini
     command: sleep infinity
-    network_mode: service:db
     environment:
       XDEBUG_MODE: off
+    ports:
+      - "8080:80"
   db:
     image: mariadb:10.4
     restart: unless-stopped

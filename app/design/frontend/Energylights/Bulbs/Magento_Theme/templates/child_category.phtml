@@ -48,31 +48,19 @@ $catId =  $category->getId();
 
         $_imgUrl = '';
 		if(isset($_category->getData()["thumbnail"])){
-		    
-        
-        if(strpos($_category->getData()["thumbnail"], '/pub/media/catalog/tmp/category/') !== false) {
-         $image_url = $_category->getData()["thumbnail"];
-         $_imgUrl = $image_url;
-        }else {
-         $image_url = str_replace('/pub/media/catalog/category/', '', $_category->getData()["thumbnail"]);
-         $_imgUrl = '/pub/media/catalog/category/'.$image_url;
+		    $_category_image = $_category->getData()["thumbnail"];
+            $_category_image = str_replace('/pub', '',  $_category_image);
+            $_category_image = str_replace('/media', '',  $_category_image);
+            $_imgUrl = $mediaUrl.ltrim($_category_image, '/');
+		} else {
+            $_imgUrl = "small_image.jpg";
         }
-
-           
-			
-		}
-        if($_imgUrl){
-          $_imgUrl;
-            $_imgUrl = $mediaUrl .str_replace('/pub/media/catalog/category//media/', '',  $_imgUrl);
-        }else{
-			$_imgUrl = '/pub/media/small_image.jpg';
-		}
 
 		?>
         <li class="cat-li cat-li-2">
 				<a class="link catname" href="<?php echo $subcaturl ?>">
 				
-				<div class="top_cat" style="background: url('<?php echo $_imgUrl; ?>');" ></div>
+				<div class="top_cat" style="background: url('<?php echo $mediaUrl.$_imgUrl; ?>');" ></div>
 				<div class="bottom_cat">
 				<?php echo $subcat->getName(); ?>
 				</div>

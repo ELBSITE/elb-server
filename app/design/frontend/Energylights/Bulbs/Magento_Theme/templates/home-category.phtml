@@ -1,4 +1,10 @@
 <?php
+$_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$mediaUrl = $_objectManager->get('Magento\Store\Model\StoreManagerInterface')
+    ->getStore()
+    ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
+?>
+<?php
 	  $categoryId = 48;
 	  $_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
 	  $category = $_objectManager->create('Magento\Catalog\Model\Category')->load($categoryId);
@@ -8,7 +14,7 @@
 	  $_imgHtml   = '';
 	  if ($_imgUrl = $category->getImageUrl()) {
 
-	   $_imgHtml = '<img src="' . $_imgUrl . '" />';
+	   $_imgHtml = '<img src="'. $_imgUrl . '" />';
 	   $_imgHtml = $_outputhelper->categoryAttribute($category, $_imgHtml, 'image');
 	   }
 ?>

@@ -700,7 +700,13 @@ class Topmenu extends MagentoTopmenu
     {
         $blockObject = $this->getLayout()->createBlock('Magento\Cms\Block\Block');
         $blockObject->setBlockId($id);
-        return $blockObject->toHtml();
+        $html = $blockObject->toHtml();
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $storeManager = $objectManager->get('\Magento\Store\Model\StoreManagerInterface');
+        $mediaBase = $storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
+
+        $html = str_replace('src="/pub/media/', 'src="'.$mediaBase, $html);
+        return $html;
     }
 
     /**
