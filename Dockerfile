@@ -38,7 +38,7 @@ RUN chown -R www-data:www-data ./app/etc
 RUN chown -R www-data:www-data ./dev/tests/static
 
 # install dependency
-USER 1000:1000
+# USER 1000:1000
 RUN composer install
 
 # switch user
