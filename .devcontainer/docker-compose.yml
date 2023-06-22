@@ -8,7 +8,6 @@ services:
     volumes:
       - ..:/var/www/html:cached
       - ./config/php.ini:/usr/local/etc/php/conf.d/custom.ini
-    command: sleep infinity
     environment:
       XDEBUG_MODE: off
     ports:
@@ -33,5 +32,16 @@ services:
       MEMORY_LIMIT: 4000M
     ports:
       - "8090:80"
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.10
+    container_name: elasticsearch
+    environment:
+      - "discovery.type=single-node"
+      - ELASTIC_USERNAME=elastic
+      - ELASTIC_PASSWORD=elastic
+      - xpack.security.enabled=true
+    ports:
+      - "9200:9200"
+      - "9300:9300"
 volumes:
   mariadb-data:

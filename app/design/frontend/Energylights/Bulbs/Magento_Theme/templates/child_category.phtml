@@ -51,7 +51,7 @@ $catId =  $category->getId();
 		    $_category_image = $_category->getData()["thumbnail"];
             $_category_image = str_replace('/pub', '',  $_category_image);
             $_category_image = str_replace('/media', '',  $_category_image);
-            $_imgUrl = $mediaUrl.ltrim($_category_image, '/');
+            $_imgUrl = ltrim($_category_image, '/');
 		} else {
             $_imgUrl = "small_image.jpg";
         }
