@@ -26,6 +26,8 @@ RUN chown -R 1000:www-data ./var
 RUN chown -R 1000:www-data ./vendor
 RUN usermod -u 1000 www-data
 RUN composer install
+RUN mv app/etc/env.example.php app/etc/env.php
+RUN mv app/etc/config.example.php app/etc/config.php
+RUN php bin/magento setup:di:compile
 RUN bin/magento setup:static-content:deploy -f
 RUN bin/magento cron:install
-RUN mv app/etc/env.example.php app/etc/env.php 
