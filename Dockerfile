@@ -38,7 +38,7 @@ RUN chown -R www-data:www-data ./app/etc
 RUN chown -R www-data:www-data ./dev/tests/static
 
 # switch user
-RUN usermod -u 33 www-data
+USER www-data:www-data
 
 # start application process
 RUN composer install
