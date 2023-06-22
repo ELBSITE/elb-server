@@ -17,7 +17,7 @@ phases:
     commands:
       - echo Logging in to Amazon ECR...
       - aws --version
-      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+      - aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email
       - echo Build completed on `date`
       - echo Pushing the Docker images...
       - docker push $REPOSITORY_URI:latest
