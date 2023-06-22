@@ -4,7 +4,8 @@ phases:
     commands:
       - echo Logging in to DOCKER...
       - docker login -u surajtiwari -p dckr_pat_Is8U6BG138cFZNz1hQF7BKRqr3E
-      - REPOSITORY_URI=364256862400.dkr.ecr.eu-west-2.amazonaws.com/elb-backend
+      - AWS_ACCOUNT_ID=364256862400
+      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.eu-west-2.amazonaws.com/elb-backend
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
   build:
