@@ -37,9 +37,12 @@ RUN chown -R www-data:www-data ./generated
 RUN chown -R www-data:www-data ./app/etc
 RUN chown -R www-data:www-data ./dev/tests/static
 
+# install dependency
+USER 1000:1000
+RUN composer install
+
 # switch user
 USER www-data:www-data
 
 # start application process
-RUN composer install
 CMD ["/var/www/html/bin/startup.sh"] 
