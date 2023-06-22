@@ -42,4 +42,4 @@ RUN usermod -u 33 www-data
 
 # start application process
 RUN composer install
-CMD ["./bin/statup.sh"] 
+CMD ["/var/www/html/bin/startup.sh"] 
