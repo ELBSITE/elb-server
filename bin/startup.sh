@@ -5,5 +5,4 @@ mv /var/www/html/app/etc/config.example.php /var/www/html/app/etc/config.php
 /var/www/html/bin/magento setup:di:compile
 /var/www/html/bin/magento setup:static-content:deploy -f
 /var/www/html/bin/magento cron:install
-/var/www/html/bin/magento indexer:reindex
 apache2-foreground
