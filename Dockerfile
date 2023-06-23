@@ -2,7 +2,7 @@ FROM php:8.1-apache-bullseye
 
 # Install MariaDB client
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get install -y cron zip mariadb-client libzip-dev libxml2-dev libjpeg62-turbo-dev libpng-dev libxslt-dev libfreetype6-dev git \ 
+    && apt-get install -y certbot python3-certbot-dns-route53 python3-certbot-apache cron zip mariadb-client libzip-dev libxml2-dev libjpeg62-turbo-dev libpng-dev libxslt-dev libfreetype6-dev git \ 
     && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 # Install required dependency
@@ -13,7 +13,7 @@ RUN docker-php-ext-install mysqli pdo pdo_mysql bcmath zip intl soap sockets gd 
 COPY ./.devcontainer/config/php.ini /usr/local/etc/php/conf.d/custom.ini
 
 # enable apache rewrite module
-RUN a2enmod rewrite && a2enmod ssl && service apache2 restart
+RUN a2enmod rewrite ssl && service apache2 restart
 
 # SETUP COMPOSER
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
@@ -45,4 +45,4 @@ RUN composer install
 USER www-data:www-data
 
 # start application process
-CMD ["/var/www/html/bin/startup.sh"] 
+CMD certbot run -a dns-route53 --dns-route53-propagation-seconds 10 -i apache -n --register-unsafely-without-email --expand --agree-tos --domains www.energylightbulbs.co.uk,energylightbulbs.co.uk ; service apache2 stop ; /var/www/html/bin/startup.sh;
