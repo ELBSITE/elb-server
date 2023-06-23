@@ -13,7 +13,7 @@ RUN docker-php-ext-install mysqli pdo pdo_mysql bcmath zip intl soap sockets gd 
 COPY ./.devcontainer/config/php.ini /usr/local/etc/php/conf.d/custom.ini
 
 # enable apache rewrite module
-RUN a2enmod rewrite && service apache2 restart
+RUN a2enmod rewrite && a2enmod ssl && service apache2 restart
 
 # SETUP COMPOSER
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"

@@ -1,4 +1,8 @@
-SetEnvIf X-Forwarded-Proto https HTTPS=on
+<IfModule mod_ssl.c>
+  SSLOptions StdEnvVars
+  SetEnvIf X-Forwarded-Proto https HTTPS=on
+</IfModule>
+
 RewriteEngine on
 RewriteCond %{REQUEST_URI} !^/pub/
 RewriteCond %{REQUEST_URI} !^/setup/
