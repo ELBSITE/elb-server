@@ -37,7 +37,7 @@ COPY ./.configs/config.example.php /var/www/html/app/etc/config.php
 
 RUN composer install
 
-git apply -f patches/pdf_fix_v2.patch
+RUN git apply -f patches/pdf_fix_v2.patch
 
 # file permissions
 RUN chown -R www-data:www-data ./pub/static
