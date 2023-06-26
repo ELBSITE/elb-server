@@ -7,12 +7,12 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 
 # Install required dependency
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
-RUN docker-php-ext-install mysqli pdo pdo_mysql bcmath zip intl soap sockets gd xsl
+RUN docker-php-ext-install mysqli pdo pdo_mysql bcmath zip intl soap sockets gd xsl opcache
 
 # remove apache log symlink
 RUN rm -rf /var/log/apache2/*
 # enable apache rewrite module
-RUN a2enmod rewrite && service apache2 restart
+RUN a2enmod rewrite ssl && service apache2 restart
 
 # SETUP COMPOSER
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"

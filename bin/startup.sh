@@ -6,4 +6,5 @@ sudo -u www-data mv /var/www/html/app/etc/config.example.php /var/www/html/app/e
 sudo -u www-data /var/www/html/bin/magento setup:di:compile
 sudo -u www-data /var/www/html/bin/magento setup:static-content:deploy -f
 sudo -u www-data /var/www/html/bin/magento cron:install
+rm -rf /usr/local/etc/php/conf.d/custom.ini
 apache2-foreground

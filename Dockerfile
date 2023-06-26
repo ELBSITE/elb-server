@@ -7,11 +7,15 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 
 # Install required dependency
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
-RUN docker-php-ext-install mysqli pdo pdo_mysql bcmath zip intl soap sockets gd xsl
+RUN docker-php-ext-install mysqli pdo pdo_mysql bcmath zip intl soap sockets gd xsl opcache
 
 # memory limit fix
 COPY ./.devcontainer/config/php.ini /usr/local/etc/php/conf.d/custom.ini
+COPY ./.configs/opcache.ini /usr/local/etc/php/conf.d/opcache-custom.ini
+COPY ./.configs/realpath.ini /usr/local/etc/php/conf.d/realpath.ini
 COPY ./.configs/000-default.conf /etc/apache2/sites-enabled/000-default.conf
+
+# disable access logs
 
 # enable apache rewrite module
 RUN a2enmod rewrite ssl && service apache2 restart
@@ -26,12 +30,16 @@ RUN mv composer.phar /usr/local/bin/composer
 WORKDIR /var/www/html
 COPY . .
 
-# set env
-# RUN echo -n $env_data | base64 -d > ./app/etc/env.php
-# RUN mv app/etc/config.example.php app/etc/config.php
+
+# set config
+COPY ./.configs/config.example.php /var/www/html/app/etc/config.php
+
+
+RUN composer install
 
 # file permissions
 RUN chown -R www-data:www-data ./pub/static
+RUN chown -R www-data:www-data ./pub/media
 RUN chown -R www-data:www-data ./var
 RUN chown -R www-data:www-data ./vendor
 RUN chown -R www-data:www-data ./generated
@@ -40,7 +48,6 @@ RUN chown -R www-data:www-data ./dev/tests/static
 
 # install dependency
 # USER 1000:1000
-RUN composer install
 
 # start application process
 CMD /var/www/html/bin/startup.sh;
