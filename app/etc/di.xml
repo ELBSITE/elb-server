@@ -1974,9 +1974,4 @@
         </arguments>
     </type>
     <preference for="Magento\Framework\Filter\Input\PurifierInterface" type="Magento\Framework\Filter\Input\Purifier"/>
-    <type name="Magento\Framework\DB\Sequence\SequenceInterface">
-        <arguments>
-            <argument name="pattern" xsi:type="string">%s%'.06d%s</argument>
-        </arguments>
-    </type>
 </config>

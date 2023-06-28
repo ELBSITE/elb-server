@@ -1,0 +1,13 @@
+diff --git a/vendor/magento/module-sales-sequence/Model/Sequence.php b/vendor/magento/module-sales-sequence/Model/Sequence.php
+index 2592c9649..ae58d0eef 100644
+--- a/vendor/magento/module-sales-sequence/Model/Sequence.php
++++ b/vendor/magento/module-sales-sequence/Model/Sequence.php
+@@ -19,7 +19,7 @@ class Sequence implements SequenceInterface
+     /**
+      * Default pattern for Sequence
+      */
+-    const DEFAULT_PATTERN  = "%s%'.09d%s";
++    const DEFAULT_PATTERN  = "%s%'.06d%s";
+ 
+     /**
+      * @var string
