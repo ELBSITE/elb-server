@@ -1,8 +1,30 @@
 diff --git a/vendor/magento/module-sales/Model/Order/Pdf/AbstractPdf.php b/vendor/magento/module-sales/Model/Order/Pdf/AbstractPdf.php
-index c67024011..bea216a3e 100644
+index c67024011..b53f6de97 100644
 --- a/vendor/magento/module-sales/Model/Order/Pdf/AbstractPdf.php
 +++ b/vendor/magento/module-sales/Model/Order/Pdf/AbstractPdf.php
-@@ -494,10 +494,10 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
+@@ -336,8 +336,9 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
+         $page->setFillColor(new \Zend_Pdf_Color_GrayScale(0));
+         $font = $this->_setFontRegular($page, 10);
+         $page->setLineWidth(0);
+-        $this->y = $this->y ?: 815;
++        $this->y = $this->y ?: 715;
+         $top = 815;
++
+         $configAddress = $this->_scopeConfig->getValue(
+             'sales/identity/address',
+             ScopeInterface::SCOPE_STORE,
+@@ -358,6 +359,10 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
+                 }
+             }
+         }
++        $page->drawText(__('Telephone : 01895 55 33 00'), $this->getAlignRight("Telephone : 01895 55 33 00", 130, 440, $font, 10), $top - 12, 'UTF-8');
++		$page->drawText(__('Email : orders@energylightbulbs.co.uk'), $this->getAlignRight("Email : orders@energylightbulbs.co.uk", 130, 440, $font, 10), $top - 24, 'UTF-8');
++		$page->drawText(__('VAT : 987650757'), $this->getAlignRight("VAT : 987650757", 130, 440, $font, 10), $top - 36, 'UTF-8');
++        $top -= 50;
+         $this->y = $this->y > $top ? $top : $this->y;
+     }
+ 
+@@ -494,10 +499,10 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
  
          $page->setFillColor(new \Zend_Pdf_Color_GrayScale(0));
          $this->_setFontBold($page, 12);
@@ -15,7 +37,11 @@ index c67024011..bea216a3e 100644
          } else {
              $page->drawText(__('Payment Method:'), 285, $top - 15, 'UTF-8');
          }
-@@ -729,22 +729,63 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
+@@ -725,26 +730,75 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
+         $lineBlock = ['lines' => [], 'height' => 15];
+         foreach ($totals as $total) {
+             $total->setOrder($order)->setSource($source);
+-
              if ($total->canDisplay()) {
                  $total->setFontSize(10);
                  foreach ($total->getTotalsForDisplay() as $totalData) {
@@ -58,11 +84,20 @@ index c67024011..bea216a3e 100644
 +                                'font_size' => $totalData['font_size'],
 +                                'font' => 'bold',
 +                            ],
-+                        ]
++                        ];
 +                    }else if($totalData['label'] == "Subtotal:") {
 +                        $lineBlock['lines'][] = [
 +                            [
 +                                'text' => $totalData['label'],
++                                'feed' => 475,
++                                'align' => 'right',
++                                'font_size' => $totalData['font_size'],
++                                'font' => 'bold',
++                            ],
++                            [
++                                'text' => $totalData['amount'],
++                                'feed' => 565,
++                                'align' => 'right',
 +                                'font_size' => $totalData['font_size'],
 +                                'font' => 'bold'
 +                            ],
@@ -73,7 +108,7 @@ index c67024011..bea216a3e 100644
 +                                'font_size' => $totalData['font_size'],
 +                                'font' => 'bold',
 +                            ],
-+                        ]
++                        ];
 +                    }else{
 +                        $lineBlock['lines'][] = [
 +                            [
