@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Magento 2 Base Package
  */
 
@@ -12,6 +12,7 @@ namespace Amasty\Base\Utils\Http;
 
 use Amasty\Base\Model\SimpleDataObject;
 use Amasty\Base\Utils\Http\Response\ResponseFactory;
+use Laminas\Http\Request;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\Adapter\CurlFactory as FrameworkCurlFactory;
 
@@ -48,7 +49,7 @@ class Curl
     public function request(
         string $url,
         $params = '',
-        string $method = \Zend_Http_Client::POST
+        string $method = Request::METHOD_POST
     ): SimpleDataObject {
         $curl = $this->curlFactory->create();
         $curl->setConfig(['timeout' => self::CONNECTION_TIMEOUT, 'header' => false, 'verifypeer' => false]);

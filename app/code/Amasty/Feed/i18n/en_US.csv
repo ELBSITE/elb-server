@@ -128,6 +128,7 @@ SKU,SKU
 Websites,Websites
 Created,Created
 Updated,Updated
+"Product ID","Product ID"
 Default,Default
 Thumbnail,Thumbnail
 "Base Image","Base Image"
@@ -257,7 +258,6 @@ Modification,Modification
 "Unable to save field with code %1","Unable to save field with code %1"
 "Unable to remove entity with ID%","Unable to remove entity with ID%"
 "Unknown compressor","Unknown compressor"
-"Product ID","Product ID"
 Qty,Qty
 "Is In Stock","Is In Stock"
 "With Predefined Product Options","With Predefined Product Options"

@@ -1,11 +1,14 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Product Feed for Magento 2
  */
 
 namespace Amasty\Feed\Model;
+
+use Laminas\Validator\EmailAddress;
+use Magento\Framework\App\ObjectManager;
 
 class Config
 {
@@ -48,9 +51,17 @@ class Config
      */
     private $config;
 
-    public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $config)
-    {
+    /**
+     * @var EmailAddress
+     */
+    private $emailAddressValidator;
+
+    public function __construct(
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        EmailAddress $emailAddressValidator = null // TODO move to not optional
+    ) {
         $this->config = $config;
+        $this->emailAddressValidator = $emailAddressValidator ?? ObjectManager::getInstance()->get(EmailAddress::class);
     }
 
     /**
@@ -131,7 +142,6 @@ class Config
 
     /**
      * @return array|null
-     * @throws \Zend_Validate_Exception
      */
     public function getEmails()
     {
@@ -139,7 +149,7 @@ class Config
             $emails = array_map('trim', explode(',', $emails));
 
             foreach ($emails as $key => $email) {
-                if (!\Zend_Validate::is($email, 'EmailAddress')) {
+                if (!$this->emailAddressValidator->isValid($email)) {
                     unset($emails[$key]);
                 }
             }

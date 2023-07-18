@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Magento 2 Base Package
  */
 
@@ -39,5 +39,7 @@ class SendSysInfo extends Command
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $this->sendSysInfo->execute();
+
+        return 0;
     }
 }

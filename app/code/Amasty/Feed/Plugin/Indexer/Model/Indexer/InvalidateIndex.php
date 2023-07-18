@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Product Feed for Magento 2
  */
 
@@ -37,7 +37,7 @@ class InvalidateIndex
         $this->locker = $locker;
     }
 
-    public function aroundReindexAll(Indexer $subject, callable $proceed): ?callable
+    public function beforeReindexAll(Indexer $subject): void
     {
         if ($this->locker->isProcessLocked()
             && in_array($subject->getId(), [FeedRuleProcessor::INDEXER_ID, ProductFeedProcessor::INDEXER_ID])) {
@@ -45,10 +45,6 @@ class InvalidateIndex
             if ($indexer->getStatus() == StateInterface::STATUS_VALID) {
                 $indexer->invalidate();
             }
-
-            return null;
         }
-
-        return $proceed();
     }
 }

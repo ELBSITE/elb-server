@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Magento 2 Base Package
  */
 
@@ -95,7 +95,7 @@ class Extension
             : [];
 
         foreach ($moduleLinks as $link) {
-            if ($item = $this->defaultMenu->get($link)) {
+            if (($item = $this->defaultMenu->get($link)) && $item->isAllowed()) {
                 $itemData = $item->toArray();
                 if (isset($itemData['id'], $itemData['resource'], $itemData['title'], $itemData['action'])) {
                     $items[] = $this->convertMenuItem($item);
@@ -159,7 +159,7 @@ class Extension
     private function convertMenuItem(Item $menuItem): array
     {
         return [
-            ItemsProvider::LABEL => $menuItem->getTitle(),
+            ItemsProvider::LABEL => __((string)$menuItem->getTitle())->render(),
             ItemsProvider::ID => $menuItem->getId(),
             ItemsProvider::TYPE => ItemsProvider::TYPE_SIMPLE,
             ItemsProvider::URL => $menuItem->getUrl() === '#' ? '' : $menuItem->getUrl()

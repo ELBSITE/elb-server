@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Product Feed for Magento 2
  */
 
@@ -142,7 +142,7 @@ class Generate extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->state->emulateAreaCode(
+        return $this->state->emulateAreaCode(
             \Magento\Framework\App\Area::AREA_GLOBAL,
             [$this, 'generate'],
             [$input, $output]
@@ -211,7 +211,9 @@ class Generate extends AbstractSetupCommand
                 $productIds = [];
 
                 foreach ($collectionData as $datum) {
-                    $productIds[] = $datum[ValidProductsInterface::VALID_PRODUCT_ID];
+                    if (isset($datum[ValidProductsInterface::VALID_PRODUCT_ID])) {
+                        $productIds[] = $datum[ValidProductsInterface::VALID_PRODUCT_ID];
+                    }
                 }
                 $currentBatch = count($productIds);
 

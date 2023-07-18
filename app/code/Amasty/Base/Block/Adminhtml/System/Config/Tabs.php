@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Magento 2 Base Package
  */
 
@@ -134,7 +134,7 @@ class Tabs extends Template
                     continue;
                 }
                 $result[current(explode('::', $section->getAttribute('resource')))] = [
-                    self::ITEM_NAME => $this->_escaper->escapeHtml((string)$section->getLabel()),
+                    self::ITEM_NAME => $this->getLabel($section),
                     self::ITEM_CLASS => $section->getClass(),
                     self::ITEM_URL => $this->getSectionUrl($section),
                     self::IS_ACTIVE => $section->getId() == $this->currentSectionId,
@@ -144,6 +144,11 @@ class Tabs extends Template
         }
 
         return $result;
+    }
+
+    private function getLabel(Section $section): string
+    {
+        return $this->_escaper->escapeHtml(__((string)$section->getLabel())->render());
     }
 
     private function getSectionUrl(Section $section): string

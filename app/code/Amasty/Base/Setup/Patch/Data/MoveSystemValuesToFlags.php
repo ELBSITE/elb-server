@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Magento 2 Base Package
  */
 
@@ -73,6 +73,8 @@ class MoveSystemValuesToFlags implements DataPatchInterface
             $this->resourceConfig->getMainTable(),
             'path LIKE "' . self::SYSTEM_CONFIG_PATH . '%"'
         );
+
+        return $this;
     }
 
     private function getOldValue(string $path): ?int

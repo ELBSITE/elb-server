@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Magento 2 Base Package
  */
 
@@ -38,6 +38,26 @@ class ExtensionTest extends TestCase
         'type' => 'simple',
         'url' => ''
     ];
+
+    /**
+     * @var ExtensionsProvider|MockObject
+     */
+    private $extensionsProviderMock;
+
+    /**
+     * @var Menu|MockObject
+     */
+    private $defaultMenuMock;
+
+    /**
+     * @var MenuItemsProvider|MockObject
+     */
+    private $menuItemsProviderMock;
+
+    /**
+     * @var Url|MockObject
+     */
+    private $urlMock;
 
     protected function setUp(): void
     {
@@ -200,7 +220,8 @@ class ExtensionTest extends TestCase
             ],
             'getTitle' => self::ITEM_TITLE,
             'getId' => $id,
-            'getUrl' => self::ITEM_URL
+            'getUrl' => self::ITEM_URL,
+            'isAllowed' => true
         ]);
     }
 

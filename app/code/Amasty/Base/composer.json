@@ -6,9 +6,9 @@
         "ext-dom": "*"
     },
     "type": "magento2-module",
-    "version": "1.14.4",
+    "version": "1.14.7",
     "license": [
-        "Commercial"
+        "proprietary"
     ],
     "autoload": {
         "files": [

@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Product Feed for Magento 2
  */
 
@@ -160,6 +160,7 @@ class Element extends \Magento\Backend\Block\Template implements RendererInterfa
             ExportProduct::PREFIX_BASIC_ATTRIBUTE . '|product_websites' => __('Websites'),
             ExportProduct::PREFIX_BASIC_ATTRIBUTE . '|created_at' => __('Created'),
             ExportProduct::PREFIX_BASIC_ATTRIBUTE . '|updated_at' => __('Updated'),
+            ExportProduct::PREFIX_BASIC_ATTRIBUTE . '|product_id' => __('Product ID'),
         ];
     }
 

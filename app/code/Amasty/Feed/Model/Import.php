@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Product Feed for Magento 2
  */
 
@@ -14,6 +14,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Setup\SampleData\Context as SampleDataContext;
+use Magento\Framework\Setup\SampleData\FixtureManager;
 
 class Import
 {
@@ -43,6 +44,16 @@ class Import
      * @var BaseSerializer
      */
     private $baseSerializer;
+
+    /**
+     * @var FixtureManager
+     */
+    private $fixtureManager;
+
+    /**
+     * @var FeedRepository
+     */
+    private $feedRepository;
 
     public function __construct(
         SampleDataContext $sampleDataContext,

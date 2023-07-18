@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Product Feed for Magento 2
  */
 
@@ -65,7 +65,7 @@ class UpdateGoogleFeedDescriptionField implements DataPatchInterface
         // Or replace existing 'html_escape', 'length:500' with the necessary ones.
         /** @var Feed $feed */
         foreach ($feedCollection->getItems() as $feed) {
-            $xmlContent = $feed->getXmlContent();
+            $xmlContent = $feed->getXmlContent() ?? '';
             preg_match("/<description>(.*?)\<\/description>/", $xmlContent, $description);
             if (!empty($description[1])) {
                 preg_match("/modify=\"(.*?)\"/", $description[1], $modifier);

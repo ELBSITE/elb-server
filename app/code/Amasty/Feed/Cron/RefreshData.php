@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Product Feed for Magento 2
  */
 
@@ -94,6 +94,11 @@ class RefreshData
      * @var LockManager
      */
     private $lockManager;
+
+    /**
+     * @var DateTime
+     */
+    private $dateTime;
 
     public function __construct(
         DateTime $dateTime,

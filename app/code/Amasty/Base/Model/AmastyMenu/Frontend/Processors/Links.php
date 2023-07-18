@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Magento 2 Base Package
  */
 
@@ -61,7 +61,7 @@ class Links
      */
     private function getExtensionsLink(): ?array
     {
-        if ($item = $this->defaultMenu->get('Amasty_Base::extensions')) {
+        if (($item = $this->defaultMenu->get('Amasty_Base::extensions')) && $item->isAllowed()) {
             return [
                 ItemsProvider::LABEL => $item->getTitle(),
                 ItemsProvider::ID => $item->getId(),
@@ -79,7 +79,7 @@ class Links
      */
     private function getMarketplaceLink(): ?array
     {
-        if ($item = $this->defaultMenu->get('Amasty_Base::marketplace')) {
+        if (($item = $this->defaultMenu->get('Amasty_Base::marketplace')) && $item->isAllowed()) {
             $url = $this->moduleInfoProvider->isOriginMarketplace()
                 ? self::MAGENTO_MARKET_URL
                 : self::MARKET_URL . Information::SEO_PARAMS . self::MARKET_SEO_CAMPAIGN_NAME;

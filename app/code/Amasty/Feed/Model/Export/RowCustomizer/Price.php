@@ -1,13 +1,14 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Product Feed for Magento 2
  */
 
 namespace Amasty\Feed\Model\Export\RowCustomizer;
 
 use Amasty\Feed\Model\Export\Product;
+use Magento\Bundle\Model\Product\Type as BundleProductType;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
@@ -15,8 +16,8 @@ use Magento\Catalog\Pricing\Price\FinalPrice as CatalogFinalPrice;
 use Magento\Catalog\Pricing\Price\RegularPrice as CatalogRegularPrice;
 use Magento\Catalog\Pricing\Price\SpecialPrice as CatalogSpecialPrice;
 use Magento\CatalogImportExport\Model\Export\RowCustomizerInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Bundle\Model\Product\Type as BundleProductType;
 
 class Price implements RowCustomizerInterface
 {
@@ -71,11 +72,13 @@ class Price implements RowCustomizerInterface
                 'price',
                 'special_price',
                 'special_from_date',
-                'special_to_date',
-
+                'special_to_date'
             ]);
+            $productCollection->getSelect()->columns(['maximal_price' => 'price_index.max_price']);
 
-            $storeId = $collection->getStoreId();
+            $storeId = $collection->getStoreId() === Store::DEFAULT_STORE_ID
+                ? $this->storeManager->getDefaultStoreView()->getId() // For getting valid configurable product price
+                : $collection->getStoreId();
             $currentCurrency = $this->storeManager->getStore()->getCurrentCurrency();
             $this->storeManager->setCurrentStore($storeId);
             $this->storeManager->getStore()->setCurrentCurrencyCode($this->export->getFormatPriceCurrency());
@@ -97,8 +100,7 @@ class Price implements RowCustomizerInterface
     {
         $customData = &$dataRow['amasty_custom_data'];
 
-        $customData[Product::PREFIX_PRICE_ATTRIBUTE]
-            = $this->prices[$productId] ?? [];
+        $customData[Product::PREFIX_PRICE_ATTRIBUTE] = $this->prices[$productId] ?? [];
 
         return $dataRow;
     }
@@ -115,7 +117,7 @@ class Price implements RowCustomizerInterface
 
         $regularPriceAmount = $priceInfo->getPrice(CatalogRegularPrice::PRICE_CODE)->getAmount();
         $specialPrice = $specialPriceInfo->getValue();
-        $finalPrice = $finalPriceInfo->getAmount()->getValue(['tax','weee']);
+        $finalPrice = $finalPriceInfo->getAmount()->getValue(['tax', 'weee']);
         $finalTaxPrice = $finalPriceInfo->getAmount()->getValue();
         $regularPrice = $priceInfo->getPrice(CatalogRegularPrice::PRICE_CODE)->getValue();
 
@@ -141,8 +143,8 @@ class Price implements RowCustomizerInterface
             'regular_price' => $regularPrice,
             'final_price' => $finalPrice,
             'tax_final_price' => $finalTaxPrice,
-            'min_price' => $finalPriceInfo->getMinimalPrice()->getValue(['tax','weee']),
-            'max_price' => $finalPriceInfo->getMaximalPrice()->getValue(['tax','weee']),
+            'min_price' => $finalPriceInfo->getMinimalPrice()->getValue(['tax', 'weee']),
+            'max_price' => $finalPriceInfo->getMaximalPrice()->getValue(['tax', 'weee']),
             'tax_min_price' => $finalPriceInfo->getMinimalPrice()->getValue(),
             'special_price' => $specialPrice
         ];
@@ -157,31 +159,27 @@ class Price implements RowCustomizerInterface
     {
         if ($item->getTypeId() === BundleProductType::TYPE_CODE) {
             $item = $this->productRepository->getById($item->getId());
-            $specialPriceInfo = $item->getPriceInfo()
-                ->getPrice(CatalogSpecialPrice::PRICE_CODE);
-            $finalPriceInfo = $item->getPriceInfo()
-                ->getPrice(CatalogFinalPrice::PRICE_CODE);
+            $specialPriceInfo = $item->getPriceInfo()->getPrice(CatalogSpecialPrice::PRICE_CODE);
+            $finalPriceInfo = $item->getPriceInfo()->getPrice(CatalogFinalPrice::PRICE_CODE);
 
             return [$specialPriceInfo, $finalPriceInfo];
         }
 
-        $specialPriceInfo = $item->getPriceInfo()
-            ->getPrice(CatalogSpecialPrice::PRICE_CODE);
-        $finalPriceInfo = $item->getPriceInfo()
-            ->getPrice(CatalogFinalPrice::PRICE_CODE);
+        $specialPriceInfo = $item->getPriceInfo()->getPrice(CatalogSpecialPrice::PRICE_CODE);
+        $finalPriceInfo = $item->getPriceInfo()->getPrice(CatalogFinalPrice::PRICE_CODE);
 
         $specialPriceValue = $specialPriceInfo->getValue();
-        $finalPriceValue = $finalPriceInfo->getValue(['tax','weee']);
+        $finalPriceValue = $finalPriceInfo->getValue(['tax', 'weee']);
         // In some cases final and special prices can be absent from collection item.
         // Check item final and special prices & reload item in case they are absent.
         if (($finalPriceValue < 0.0001 && $finalPriceValue !== false)
             || ($specialPriceValue < 0.0001 && $specialPriceValue !== false)
         ) {
+            $oldData = $item->getData();
             $item = $this->productRepository->getById($item->getId());
-            $specialPriceInfo = $item->getPriceInfo()
-                ->getPrice(CatalogSpecialPrice::PRICE_CODE);
-            $finalPriceInfo = $item->getPriceInfo()
-                ->getPrice(CatalogFinalPrice::PRICE_CODE);
+            $item->setData(array_merge($oldData, $item->getData()));
+            $specialPriceInfo = $item->getPriceInfo()->getPrice(CatalogSpecialPrice::PRICE_CODE);
+            $finalPriceInfo = $item->getPriceInfo()->getPrice(CatalogFinalPrice::PRICE_CODE);
         }
 
         return [$specialPriceInfo, $finalPriceInfo];

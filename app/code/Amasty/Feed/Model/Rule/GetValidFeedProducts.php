@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Product Feed for Magento 2
  */
 
@@ -157,7 +157,7 @@ class GetValidFeedProducts
             ['rel' => $productCollection->getResource()->getTable('catalog_product_relation')],
             'rel.child_id = e.entity_id',
             []
-        )->where('rel.parent_id NOT IN (?)', $subSelect);
+        )->where('rel.parent_id NOT IN (?) OR rel.parent_id IS NULL', $subSelect);
     }
 
     private function getDisabledParentProductsSelect(int $storeId): Select

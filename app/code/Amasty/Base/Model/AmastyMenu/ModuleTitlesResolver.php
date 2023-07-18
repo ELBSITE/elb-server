@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Magento 2 Base Package
  */
 
@@ -65,7 +65,7 @@ class ModuleTitlesResolver
             if (!$title) {
                 $title = $this->getModuleTitle($moduleCode);
             }
-            $modules[$moduleCode] = $title;
+            $modules[$moduleCode] = __($title)->render();
         }
 
         return $modules;
