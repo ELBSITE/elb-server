@@ -1,0 +1,53 @@
+diff --git a/vendor/magento/module-sales/view/adminhtml/templates/order/view/items.phtml b/vendor/magento/module-sales/view/adminhtml/templates/order/view/items.phtml
+index 734ad24b0..3676c653e 100644
+--- a/vendor/magento/module-sales/view/adminhtml/templates/order/view/items.phtml
++++ b/vendor/magento/module-sales/view/adminhtml/templates/order/view/items.phtml
+@@ -12,6 +12,7 @@ $_order = $block->getOrder() ?>
+     <table class="data-table admin__table-primary edit-order-table">
+         <thead>
+             <tr class="headings">
++                <th>Image</th>
+                 <?php $i = 0;
+                 $columns = $block->getColumns();
+                 $lastItemNumber = count($columns) ?>
+diff --git a/vendor/magento/module-sales/view/adminhtml/templates/order/view/items/renderer/default.phtml b/vendor/magento/module-sales/view/adminhtml/templates/order/view/items/renderer/default.phtml
+index c54e23d14..fbcf08fc4 100644
+--- a/vendor/magento/module-sales/view/adminhtml/templates/order/view/items/renderer/default.phtml
++++ b/vendor/magento/module-sales/view/adminhtml/templates/order/view/items/renderer/default.phtml
+@@ -8,13 +8,36 @@
+ <?php $_item = $block->getItem() ?>
+ <?php $block->setPriceDataObject($_item) ?>
+ <tr>
++    <td>
++        <?php
++
++$product_id  = $_item->getProductId();
++$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
++$product = $objectManager->create('Magento\Catalog\Model\Product')->load($product_id);
++
++if($product->getData('image') !=''){
++    $helperImport = $objectManager->create('\Magento\Catalog\Helper\Image');
++    $productImage = $helperImport->init($product, 'product_page_image_small')
++    ->setImageFile($product->getImage()) // image,small_image,thumbnail
++    ->resize(150)
++    ->getUrl(); ?>
++    <img src="<?=$productImage?>" title="<?= $block->escapeHtml($_item->getName()) ?>" alt="<?= $block->escapeHtml($_item->getName()) ?>" />
++<?php
++} else {
++  echo 'No Image Found'; 
++}
++?>
++
++</td>
+     <?php $i = 0;
+     $columns = $block->getColumns();
+     $lastItemNumber = count($columns) ?>
+     <?php foreach ($columns as $columnName => $columnClass) : ?>
++    
+         <?php $i++; ?>
+         <td class="<?= /* @noEscape */ $columnClass ?><?= /* @noEscape */ ($i === $lastItemNumber ? ' last' : '') ?>">
+             <?= $block->getColumnHtml($_item, $columnName) ?>
+         </td>
+     <?php endforeach; ?>
+ </tr>
++

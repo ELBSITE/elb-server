@@ -40,6 +40,7 @@ RUN composer install
 RUN git apply patches/pdf_fix_v2.patch
 RUN git apply patches/sequence_fix.patch
 RUN git apply patches/invoice_fix_v2.patch
+RUN git apply patches/order_item_image.patch
 
 # file permissions
 RUN chown -R www-data:www-data ./pub/static
