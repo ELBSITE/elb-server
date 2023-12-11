@@ -15,4 +15,12 @@
             <sort_order>700</sort_order>
         </total>
     </totals>
+    <renderers>
+        <page type="order">
+            <renderer product_type="default">Magento\Sales\Model\Order\Pdf\Items\Invoice\DefaultInvoice</renderer>
+            <renderer product_type="bundle">Magemonkey\Pdf\Model\Pdf\BundleItems</renderer>
+            <renderer product_type="downloadable">Magento\Downloadable\Model\Sales\Order\Pdf\Items\Invoice</renderer>
+            <renderer product_type="grouped">Magento\GroupedProduct\Model\Order\Pdf\Items\Invoice\Grouped</renderer>
+        </page>
+    </renderers>
 </config>
