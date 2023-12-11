@@ -1,4 +1,4 @@
 <?php
-// echo "checkfile";
-phpinfo();
+// echo "testing";
+// phpinfo();
 ?>
